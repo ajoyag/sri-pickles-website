@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Authentic Pickles | Achar Heritage</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'spice-red': '#B9382E',
+                        'turmeric': '#EUA904',
+                        'saffron': '#FF9933',
+                        'mango-green': '#586E37',
+                        'clay': '#8D5B4C',
+                        'sand': '#FDFBF7',
+                        'gold': '#D4AF37',
+                    },
+                    fontFamily: {
+                        serif: ['"Crimson Text"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'mandala-pattern': "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-up': 'fadeUp 0.8s ease-out forwards',
+                        'toast-slide': 'toastSlide 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        toastSlide: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Shared Styles */
+        body { background-color: #FDFBF7; }
+        
+        .indian-border {
+            border: 2px solid #D4AF37;
+            border-radius: 8px;
+            position: relative;
+        }
+        .indian-border::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px dashed #B9382E;
+            pointer-events: none;
+            border-radius: 4px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #B9382E; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(185, 56, 46, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* Loader for Payment */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #B9382E;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-sand selection:bg-saffron selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b-4 border-gold">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group cursor-pointer">
+                <div class="w-10 h-10 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold group-hover:bg-gold group-hover:border-spice-red transition-colors duration-500">
+                    <i data-lucide="flower-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-serif text-2xl font-bold text-spice-red leading-none group-hover:text-gold transition-colors duration-300">Achar Heritage</h1>
+                    <p class="text-xs text-mango-green font-bold tracking-widest uppercase">Since 1954</p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Home</a>
+                <a href="shop.html" class="hidden md:block text-spice-red font-bold underline decoration-gold decoration-2 underline-offset-4 cursor-default">Shop</a>
+                <a href="about.html" class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Our Story</a>
+                
+                <button onclick="toggleCart()" class="relative p-2 hover:bg-orange-50 rounded-full transition-colors group">
+                    <i data-lucide="shopping-bag" class="w-6 h-6 text-gray-700 group-hover:text-spice-red transition-colors"></i>
+                    <span id="cart-badge" class="absolute top-0 right-0 bg-spice-red text-white text-xs w-5 h-5 flex items-center justify-center rounded-full opacity-0 transition-all duration-300 transform scale-0">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Shop Header -->
+    <header class="bg-spice-red text-white py-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-mandala-pattern"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="font-serif text-4xl md:text-5xl font-bold mb-2 animate-fade-up">The Pantry</h1>
+            <p class="text-orange-100 animate-fade-up" style="animation-delay: 0.1s;">Hand-picked, sun-dried, and jarred with love.</p>
+        </div>
+    </header>
+
+    <!-- Main Shop Section -->
+    <section class="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8 items-start">
+        
+        <!-- Filters Sidebar -->
+        <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg indian-border shadow-md lg:sticky lg:top-24 z-30">
+            <div class="flex justify-between items-center mb-4 lg:hidden cursor-pointer" onclick="toggleFilters()">
+                <h3 class="font-serif text-xl font-bold text-spice-red">Filters</h3>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500"></i>
+            </div>
+            
+            <div id="filter-content" class="hidden lg:block space-y-6">
+                <!-- Search -->
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search pickles..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-spice-red transition-colors font-sans" onkeyup="filterProducts()">
+                    <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
+                </div>
+
+                <!-- Categories -->
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-2 border-b border-gold/30 pb-1">Category</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
+                                <input type="radio" name="category" value="all" checked onchange="filterProducts()" class="accent-spice-red"> All Items
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
+                                <input type="radio" name="category" value="Pickle" onchange="filterProducts()" class="accent-spice-red"> Traditional Pickles
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
+                                <input type="radio" name="category" value="Chutney" onchange="filterProducts()" class="accent-spice-red"> Chutneys (Sweet/Spicy)
+                            </label>
+                        </li>
+                        <li>
+                            <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
+                                <input type="radio" name="category" value="Spices" onchange="filterProducts()" class="accent-spice-red"> Dry Spices
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Price Sort -->
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-2 border-b border-gold/30 pb-1">Sort By</h4>
+                    <select id="sort-select" onchange="filterProducts()" class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-spice-red">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Product Grid Area -->
+        <main class="w-full lg:w-3/4">
+            <div class="flex justify-between items-center mb-6">
+                <p class="text-gray-500 text-sm italic">Showing <span id="product-count" class="font-bold text-spice-red">0</span> products</p>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Products injected via JS -->
+            </div>
+            
+            <div id="no-results" class="hidden text-center py-12">
+                <i data-lucide="search-x" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+                <p class="text-gray-500">No pickles found matching your taste.</p>
+                <button onclick="resetFilters()" class="mt-4 text-spice-red font-bold hover:underline">Clear Filters</button>
+            </div>
+        </main>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-6 border-t-8 border-gold mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
+                <div>
+                    <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
+                        <i data-lucide="flower-2" class="w-6 h-6 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-bold text-white">Achar Heritage</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">Grandma's recipe, now in your kitchen.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="shop.html" class="hover:text-white">Shop All</a></li>
+                        <li><a href="about.html" class="hover:text-white">Our Story</a></li>
+                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Secure Payment</h4>
+                    <div class="flex justify-center md:justify-start gap-4 text-gray-500">
+                        <i data-lucide="credit-card" class="w-6 h-6"></i>
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-6 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 Achar Heritage. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2"></div>
+
+    <!-- Cart Sidebar Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300" onclick="toggleCart()"></div>
+    
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-sand shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col border-l-4 border-gold">
+        <div class="p-6 bg-white border-b border-gray-200 flex justify-between items-center">
+            <h2 class="font-serif text-2xl font-bold text-spice-red">Your Jars</h2>
+            <button onclick="toggleCart()" class="text-gray-500 hover:text-spice-red transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Cart items injected here -->
+            <div class="text-center text-gray-500 mt-10">
+                <i data-lucide="shopping-basket" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                <p>Your cart is empty.</p>
+                <button onclick="toggleCart()" class="mt-4 text-spice-red font-bold hover:underline">Start Shopping</button>
+            </div>
+        </div>
+
+        <div class="p-6 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+            <div class="flex justify-between mb-2 text-gray-600">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">₹0</span>
+            </div>
+            <div class="flex justify-between mb-4 text-xl font-bold text-spice-red">
+                <span>Total</span>
+                <span id="cart-total">₹0</span>
+            </div>
+            <button onclick="openCheckout()" class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors flex justify-center items-center gap-2">
+                Checkout <i data-lucide="credit-card" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300 relative">
+            <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="lock" class="w-4 h-4 text-green-600"></i>
+                    <span class="font-bold text-gray-700">Secure Payment</span>
+                </div>
+                <button onclick="closeCheckout()" class="text-gray-400 hover:text-gray-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="bg-orange-50 p-3 rounded-md mb-6 border border-orange-100 flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Total Amount</span>
+                    <span id="payment-total" class="font-bold text-spice-red text-lg">₹0</span>
+                </div>
+                <form id="payment-form" onsubmit="processPayment(event)">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Card Holder Name</label>
+                            <input type="text" required placeholder="Name on Card" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Card Number</label>
+                            <input type="text" required placeholder="0000 0000 0000 0000" maxlength="19" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-1/2">
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Expiry</label>
+                                <input type="text" required placeholder="MM/YY" maxlength="5" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                            </div>
+                            <div class="w-1/2">
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">CVV</label>
+                                <input type="password" required placeholder="123" maxlength="3" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                            </div>
+                        </div>
+                        <div class="pt-4">
+                            <button type="submit" id="pay-btn" class="w-full bg-green-600 text-white py-3 rounded-md font-bold hover:bg-green-700 transition-colors shadow-lg flex justify-center items-center gap-2">
+                                Pay Now
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="payment-success" class="hidden text-center py-8">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 animate-bounce">
+                        <i data-lucide="check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h3>
+                    <p class="text-gray-600 text-sm mb-6">Your order has been placed successfully.</p>
+                    <button onclick="closeCheckout()" class="bg-gray-800 text-white px-6 py-2 rounded-full font-bold hover:bg-black transition-colors">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Extended Product Data with Ratings and Original Prices
+        const products = [
+            { id: 1, name: "Spicy Mango Achar", price: 349, originalPrice: 399, category: "Pickle", weight: "500g", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop", tag: "Bestseller", rating: 5 },
+            { id: 2, name: "Lemon & Green Chilli", price: 299, category: "Pickle", weight: "400g", image: "https://t3.ftcdn.net/jpg/04/41/27/93/360_F_441279318_K0ZtWd9rXq1B2Q1t5W1W6X2X3Y4Z5.jpg", tag: "Tangy", rating: 4 },
+            { id: 3, name: "Garlic & Ginger Mix", price: 399, originalPrice: 450, category: "Pickle", weight: "500g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_x_y_z_1_2_3_4_5_6_7_8_9_0&s", tag: "Immunity", rating: 5 },
+            { id: 4, name: "Sweet Lime Chutney", price: 249, category: "Chutney", weight: "300g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_a_b_c_d_e_f_g_h_i_j_k_l_m_n&s", tag: "Kids Favorite", rating: 4.5 },
+            { id: 5, name: "Stuffed Red Chilli", price: 449, category: "Pickle", weight: "500g", image: "https://thumbs.dreamstime.com/b/stuffed-red-chilli-pickle-bharwa-mirch-ka-achar-indian-traditional-food-vanarasi-style-isolated-white-background-200373070.jpg", tag: "Spicy", rating: 5 },
+            { id: 6, name: "Gonda (Lasoda) Pickle", price: 320, category: "Pickle", weight: "400g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dummy_url_for_lasoda&s", tag: "Seasonal", rating: 4 },
+            { id: 7, name: "Imli (Tamarind) Chutney", price: 199, originalPrice: 220, category: "Chutney", weight: "250g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dummy_url_for_imli&s", tag: "Sweet & Sour", rating: 4.5 },
+            { id: 8, name: "Kashmiri Chilli Powder", price: 150, category: "Spices", weight: "100g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dummy_url_for_spices&s", tag: "Premium", rating: 5 },
+        ];
+
+        const fallbackImg = "https://placehold.co/600x400/B9382E/FFF?text=Achar+Heritage";
+
+        // Scroll Animation - Initialized early to be available for renderProducts
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        // Helper to generate stars
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    // Full Star
+                    stars += `<svg class="w-3 h-3 text-gold fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+                } else if (i - 0.5 === rating) {
+                    // Half Star (Approximated with simple logic for now, or just use full/empty)
+                     stars += `<svg class="w-3 h-3 text-gold fill-current opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+                } else {
+                    // Empty Star
+                     stars += `<svg class="w-3 h-3 text-gray-300 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+                }
+            }
+            return `<div class="flex items-center justify-center gap-0.5 mt-1 mb-2">${stars}</div>`;
+        }
+
+        // Filter & Sort Logic
+        function filterProducts() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const category = document.querySelector('input[name="category"]:checked').value;
+            const sort = document.getElementById('sort-select').value;
+
+            let filtered = products.filter(p => {
+                const matchesSearch = p.name.toLowerCase().includes(search);
+                const matchesCategory = category === 'all' || p.category === category;
+                return matchesSearch && matchesCategory;
+            });
+
+            // Sorting
+            if (sort === 'price-low') filtered.sort((a, b) => a.price - b.price);
+            else if (sort === 'price-high') filtered.sort((a, b) => b.price - a.price);
+
+            renderProducts(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.querySelector('input[name="category"][value="all"]').checked = true;
+            document.getElementById('sort-select').value = 'featured';
+            filterProducts();
+        }
+
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            const noResults = document.getElementById('no-results');
+            const count = document.getElementById('product-count');
+
+            count.innerText = items.length;
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = items.map((product, index) => {
+                const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+                
+                return `
+                <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover indian-border bg-white reveal" style="animation-delay: ${index * 100}ms">
+                    <div class="relative h-56 overflow-hidden bg-gray-200 group">
+                        <img src="${product.image}" onerror="this.src='${fallbackImg}'" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+                        <div class="absolute top-2 right-2 flex flex-col items-end gap-1">
+                            <span class="bg-gold text-white text-xs font-bold px-2 py-1 rounded shadow">${product.tag}</span>
+                            ${discount > 0 ? `<span class="bg-spice-red text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">-${discount}% OFF</span>` : ''}
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
+                            <button onclick="addToCart(${product.id})" class="bg-spice-red text-white px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                                Add to Cart <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4 text-center">
+                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">${product.category}</div>
+                        <h3 class="font-serif text-lg font-bold text-gray-800 leading-tight">${product.name}</h3>
+                        ${renderStars(product.rating)}
+                        <p class="text-sm text-gray-500 mb-2">${product.weight}</p>
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="text-xl font-bold text-spice-red">₹${product.price}</span>
+                            ${product.originalPrice ? `<span class="text-sm text-gray-400 line-through">₹${product.originalPrice}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+            
+            // Re-observe animations for new elements
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            lucide.createIcons();
+        }
+
+        function toggleFilters() {
+            document.getElementById('filter-content').classList.toggle('hidden');
+        }
+
+        // --- Toast Logic ---
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-toast-slide border-l-4 border-gold";
+            toast.innerHTML = `
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+                <span class="text-sm font-semibold">${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- Cart Logic ---
+        let cart = [];
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+            
+            if (!isOpen) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const existing = cart.find(i => i.id === id);
+            if(existing) existing.qty++; else cart.push({...product, qty: 1});
+            
+            updateCartUI();
+            showToast(`Added ${product.name} to cart`);
+            
+            // Animate Badge
+            const badge = document.getElementById('cart-badge');
+            badge.classList.remove('scale-0');
+            badge.classList.add('scale-125');
+            setTimeout(() => badge.classList.remove('scale-125'), 200);
+
+            // Removed auto-open of sidebar to keep flow smooth with toasts
+            // const sidebar = document.getElementById('cart-sidebar');
+            // if(sidebar.classList.contains('translate-x-full')) toggleCart();
+        }
+
+        function updateQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if(item) {
+                item.qty += delta;
+                if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const badge = document.getElementById('cart-badge');
+            const totalEl = document.getElementById('cart-total');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            
+            const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+            const totalPrice = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            
+            badge.innerText = totalQty;
+            badge.classList.toggle('scale-0', totalQty === 0);
+            
+            totalEl.innerText = `₹${totalPrice}`;
+            subtotalEl.innerText = `₹${totalPrice}`;
+            document.getElementById('payment-total').innerText = `₹${totalPrice}`;
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 mt-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 opacity-50"><path d="m21 16-1.247-6.859c-.27-1.482-1.602-2.52-3.107-2.392l-4.996.42c-1.233.103-2.18 1.147-2.18 2.392v6.237c0 .553.448 1.002 1 1.002h9.53c.552 0 1-.449 1-1.002Z"/><path d="M5.5 21a2.5 2.5 0 0 0 2.5-2.5V8.857c0-1.57 1.35-2.8 2.915-2.663l5.064.445"/><path d="M2 7h20"/></svg>
+                        <p>Your cart is empty.</p>
+                        <button onclick="toggleCart()" class="mt-4 text-spice-red font-bold hover:underline">Keep Shopping</button>
+                    </div>`;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex items-center gap-4 bg-white p-3 rounded-md shadow-sm border border-gray-100 animate-in fade-in slide-in-from-right-4 duration-300">
+                        <img src="${item.image}" onerror="this.src='${fallbackImg}'" class="w-14 h-14 object-cover rounded-md">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-gray-800 text-sm truncate">${item.name}</h4>
+                            <p class="text-xs text-gray-500">₹${item.price} x ${item.qty}</p>
+                        </div>
+                        <div class="flex items-center bg-gray-100 rounded-lg">
+                            <button onclick="updateQty(${item.id}, -1)" class="px-2 py-1 hover:text-spice-red">-</button>
+                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                            <button onclick="updateQty(${item.id}, 1)" class="px-2 py-1 hover:text-spice-red">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            lucide.createIcons();
+        }
+
+        // --- Payment Logic ---
+        function openCheckout() {
+            if(cart.length === 0) return alert("Cart is empty!");
+            toggleCart();
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+
+        function closeCheckout() {
+            document.getElementById('payment-modal').classList.add('hidden');
+            if (!document.getElementById('payment-success').classList.contains('hidden')) {
+                // Reset after success
+                setTimeout(() => {
+                    document.getElementById('payment-form').classList.remove('hidden');
+                    document.getElementById('payment-success').classList.add('hidden');
+                    document.getElementById('payment-form').reset();
+                    document.getElementById('pay-btn').innerHTML = 'Pay Now';
+                }, 500);
+            }
+        }
+
+        function processPayment(e) {
+            e.preventDefault();
+            const btn = document.getElementById('pay-btn');
+            const originalContent = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<div class="loader mr-2"></div> Processing...`;
+            
+            setTimeout(() => {
+                document.getElementById('payment-form').classList.add('hidden');
+                document.getElementById('payment-success').classList.remove('hidden');
+                cart = [];
+                updateCartUI();
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }, 2000);
+        }
+
+        // Init
+        renderProducts(products);
+    </script>
+</body>
+</html>
