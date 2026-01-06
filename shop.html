@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Authentic Pickles | Achar Heritage</title>
-    
+    <title>Shop Authentic Pickles | Sri Pickles</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -59,35 +62,57 @@
 
     <style>
         /* Shared Styles */
-        body { background-color: #FDFBF7; }
-        
+        body {
+            background-color: #FDFBF7;
+        }
+
         .indian-border {
             border: 2px solid #D4AF37;
             border-radius: 8px;
             position: relative;
         }
+
         .indian-border::before {
             content: '';
             position: absolute;
-            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
             border: 1px dashed #B9382E;
             pointer-events: none;
             border-radius: 4px;
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #FDFBF7; }
-        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #B9382E; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B9382E;
+        }
 
         .reveal {
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(185, 56, 46, 0.15);
@@ -103,32 +128,52 @@
             height: 20px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
+
 <body class="font-sans text-gray-800 bg-sand selection:bg-saffron selection:text-white">
 
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b-4 border-gold">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-2 group cursor-pointer">
-                <div class="w-10 h-10 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold group-hover:bg-gold group-hover:border-spice-red transition-colors duration-500">
+                <img src="logo.png" alt="Sri Pickles Logo" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-10 h-10 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold group-hover:bg-gold group-hover:border-spice-red transition-colors duration-500 hidden">
                     <i data-lucide="flower-2" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="font-serif text-2xl font-bold text-spice-red leading-none group-hover:text-gold transition-colors duration-300">Achar Heritage</h1>
-                    <p class="text-xs text-mango-green font-bold tracking-widest uppercase">Since 1954</p>
+                    <h1
+                        class="font-serif text-2xl font-bold text-spice-red leading-none group-hover:text-gold transition-colors duration-300">
+                        Sri Pickles</h1>
+                    <p class="text-xs text-mango-green font-bold tracking-widest uppercase">Nirmal, Telangana</p>
                 </div>
             </a>
 
             <div class="flex items-center gap-6">
-                <a href="index.html" class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Home</a>
-                <a href="shop.html" class="hidden md:block text-spice-red font-bold underline decoration-gold decoration-2 underline-offset-4 cursor-default">Shop</a>
-                <a href="about.html" class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Our Story</a>
-                
-                <button onclick="toggleCart()" class="relative p-2 hover:bg-orange-50 rounded-full transition-colors group">
-                    <i data-lucide="shopping-bag" class="w-6 h-6 text-gray-700 group-hover:text-spice-red transition-colors"></i>
-                    <span id="cart-badge" class="absolute top-0 right-0 bg-spice-red text-white text-xs w-5 h-5 flex items-center justify-center rounded-full opacity-0 transition-all duration-300 transform scale-0">0</span>
+                <a href="index.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Home</a>
+                <a href="shop.html"
+                    class="hidden md:block text-spice-red font-bold underline decoration-gold decoration-2 underline-offset-4 cursor-default">Shop</a>
+                <a href="about.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Our
+                    Story</a>
+
+                <button onclick="toggleCart()"
+                    class="relative p-2 hover:bg-orange-50 rounded-full transition-colors group">
+                    <i data-lucide="shopping-bag"
+                        class="w-6 h-6 text-gray-700 group-hover:text-spice-red transition-colors"></i>
+                    <span id="cart-badge"
+                        class="absolute top-0 right-0 bg-spice-red text-white text-xs w-5 h-5 flex items-center justify-center rounded-full opacity-0 transition-all duration-300 transform scale-0">0</span>
                 </button>
             </div>
         </div>
@@ -139,24 +184,27 @@
         <div class="absolute inset-0 opacity-10 bg-mandala-pattern"></div>
         <div class="container mx-auto px-4 relative z-10 text-center">
             <h1 class="font-serif text-4xl md:text-5xl font-bold mb-2 animate-fade-up">The Pantry</h1>
-            <p class="text-orange-100 animate-fade-up" style="animation-delay: 0.1s;">Hand-picked, sun-dried, and jarred with love.</p>
+            <p class="text-orange-100 animate-fade-up" style="animation-delay: 0.1s;">Hand-picked, sun-dried, and jarred
+                with love.</p>
         </div>
     </header>
 
     <!-- Main Shop Section -->
     <section class="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8 items-start">
-        
+
         <!-- Filters Sidebar -->
         <aside class="w-full lg:w-1/4 bg-white p-6 rounded-lg indian-border shadow-md lg:sticky lg:top-24 z-30">
             <div class="flex justify-between items-center mb-4 lg:hidden cursor-pointer" onclick="toggleFilters()">
                 <h3 class="font-serif text-xl font-bold text-spice-red">Filters</h3>
                 <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500"></i>
             </div>
-            
+
             <div id="filter-content" class="hidden lg:block space-y-6">
                 <!-- Search -->
                 <div class="relative">
-                    <input type="text" id="search-input" placeholder="Search pickles..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-spice-red transition-colors font-sans" onkeyup="filterProducts()">
+                    <input type="text" id="search-input" placeholder="Search pickles..."
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-spice-red transition-colors font-sans"
+                        onkeyup="filterProducts()">
                     <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"></i>
                 </div>
 
@@ -166,17 +214,20 @@
                     <ul class="space-y-2 text-sm text-gray-600">
                         <li>
                             <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
-                                <input type="radio" name="category" value="all" checked onchange="filterProducts()" class="accent-spice-red"> All Items
+                                <input type="radio" name="category" value="all" checked onchange="filterProducts()"
+                                    class="accent-spice-red"> All Items
                             </label>
                         </li>
                         <li>
                             <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
-                                <input type="radio" name="category" value="Veg" onchange="filterProducts()" class="accent-spice-red"> Veg Pickles & Podi
+                                <input type="radio" name="category" value="Veg" onchange="filterProducts()"
+                                    class="accent-spice-red"> Veg Pickles & Podi
                             </label>
                         </li>
                         <li>
                             <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
-                                <input type="radio" name="category" value="Non Veg" onchange="filterProducts()" class="accent-spice-red"> Non-Veg Pickles
+                                <input type="radio" name="category" value="Non Veg" onchange="filterProducts()"
+                                    class="accent-spice-red"> Non-Veg Pickles
                             </label>
                         </li>
                     </ul>
@@ -185,7 +236,8 @@
                 <!-- Price Sort -->
                 <div>
                     <h4 class="font-bold text-gray-800 mb-2 border-b border-gold/30 pb-1">Sort By</h4>
-                    <select id="sort-select" onchange="filterProducts()" class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-spice-red">
+                    <select id="sort-select" onchange="filterProducts()"
+                        class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-spice-red">
                         <option value="featured">Featured</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
@@ -195,9 +247,12 @@
                 <!-- Bulk Ordering Section -->
                 <div class="pt-4 border-t border-gold/30">
                     <h4 class="font-bold text-gray-800 mb-2 border-b border-gold/30 pb-1">Bulk Orders</h4>
-                    <p class="text-xs text-gray-600 mb-3">No price structure for bulk orders. Leave contact info for custom quote.</p>
-                    <p class="text-xs text-gray-500 italic mb-3">Small business - prices vary as raw ingredients are locally sourced.</p>
-                    <button onclick="openBulkOrderForm()" class="w-full bg-gold text-spice-red px-4 py-2 rounded-md font-bold hover:bg-yellow-500 transition-colors text-sm">
+                    <p class="text-xs text-gray-600 mb-3">No price structure for bulk orders. Leave contact info for
+                        custom quote.</p>
+                    <p class="text-xs text-gray-500 italic mb-3">Small business - prices vary as raw ingredients are
+                        locally sourced.</p>
+                    <button onclick="openBulkOrderForm()"
+                        class="w-full bg-gold text-spice-red px-4 py-2 rounded-md font-bold hover:bg-yellow-500 transition-colors text-sm">
                         Request Bulk Quote
                     </button>
                 </div>
@@ -207,23 +262,28 @@
         <!-- Product Grid Area -->
         <main class="w-full lg:w-3/4">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
-                <p class="text-gray-500 text-sm italic">Showing <span id="product-count" class="font-bold text-spice-red">0</span> products</p>
+                <p class="text-gray-500 text-sm italic">Showing <span id="product-count"
+                        class="font-bold text-spice-red">0</span> products</p>
                 <div class="flex items-center gap-2 text-sm">
                     <span class="text-gray-600 mr-1">Quick Filter:</span>
-                    <button type="button" onclick="setCategoryFilter('all')" class="px-3 py-1 rounded-full border text-xs md:text-sm border-gold text-spice-red bg-gold/10 hover:bg-gold/20 transition-colors">All</button>
-                    <button type="button" onclick="setCategoryFilter('Veg')" class="px-3 py-1 rounded-full border text-xs md:text-sm border-emerald-500 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors">Veg</button>
-                    <button type="button" onclick="setCategoryFilter('Non Veg')" class="px-3 py-1 rounded-full border text-xs md:text-sm border-red-500 text-red-700 bg-red-50 hover:bg-red-100 transition-colors">Non-Veg</button>
+                    <button type="button" onclick="setCategoryFilter('all')"
+                        class="px-3 py-1 rounded-full border text-xs md:text-sm border-gold text-spice-red bg-gold/10 hover:bg-gold/20 transition-colors">All</button>
+                    <button type="button" onclick="setCategoryFilter('Veg')"
+                        class="px-3 py-1 rounded-full border text-xs md:text-sm border-emerald-500 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors">Veg</button>
+                    <button type="button" onclick="setCategoryFilter('Non Veg')"
+                        class="px-3 py-1 rounded-full border text-xs md:text-sm border-red-500 text-red-700 bg-red-50 hover:bg-red-100 transition-colors">Non-Veg</button>
                 </div>
             </div>
 
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Products injected via JS -->
             </div>
-            
+
             <div id="no-results" class="hidden text-center py-12">
                 <i data-lucide="search-x" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
                 <p class="text-gray-500">No pickles found matching your taste.</p>
-                <button onclick="resetFilters()" class="mt-4 text-spice-red font-bold hover:underline">Clear Filters</button>
+                <button onclick="resetFilters()" class="mt-4 text-spice-red font-bold hover:underline">Clear
+                    Filters</button>
             </div>
         </main>
     </section>
@@ -235,7 +295,7 @@
                 <div>
                     <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
                         <i data-lucide="flower-2" class="w-6 h-6 text-gold"></i>
-                        <h3 class="font-serif text-2xl font-bold text-white">Achar Heritage</h3>
+                        <h3 class="font-serif text-2xl font-bold text-white">Sri Pickles</h3>
                     </div>
                     <p class="text-gray-400 text-sm">Grandma's recipe, now in your kitchen.</p>
                 </div>
@@ -256,17 +316,19 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-6 text-center text-gray-500 text-sm">
-                <p>&copy; 2024 Achar Heritage. All rights reserved.</p>
+                <p>&copy; 2024 Sri Pickles. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- Toast Notifications Container (moved to top so it doesn't block cart/checkout) -->
-    <div id="toast-container" class="fixed top-4 right-4 z-[70] flex flex-col gap-2"></div>
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[70] flex flex-col gap-2 items-center"></div>
 
     <!-- Bulk Order Modal -->
-    <div id="bulk-order-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300 relative">
+    <div id="bulk-order-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300">
+        <div
+            class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300 relative">
             <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="font-serif text-xl font-bold text-spice-red">Bulk Order Inquiry</h3>
                 <button onclick="closeBulkOrderForm()" class="text-gray-400 hover:text-gray-700">
@@ -276,21 +338,26 @@
             <form id="bulk-order-form" onsubmit="submitBulkOrder(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Name *</label>
-                    <input type="text" id="bulk-name" required placeholder="Your Name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    <input type="text" id="bulk-name" required placeholder="Your Name"
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Phone Number *</label>
-                    <input type="tel" id="bulk-phone" required placeholder="+91 98765 43210" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    <input type="tel" id="bulk-phone" required placeholder="+91 98765 43210"
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email *</label>
-                    <input type="email" id="bulk-email" required placeholder="your@email.com" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    <input type="email" id="bulk-email" required placeholder="your@email.com"
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Quantity & Items Needed</label>
-                    <textarea id="bulk-details" rows="4" placeholder="E.g., 50kg Mango Pickle, 30kg Chicken Pickle..." class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red"></textarea>
+                    <textarea id="bulk-details" rows="4" placeholder="E.g., 50kg Mango Pickle, 30kg Chicken Pickle..."
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
+                <button type="submit"
+                    class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
                     Submit Inquiry
                 </button>
             </form>
@@ -298,9 +365,12 @@
     </div>
 
     <!-- Product Detail Modal -->
-    <div id="product-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300 overflow-y-auto">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl overflow-hidden animate-in fade-in zoom-in duration-300 relative my-8">
-            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 z-10 bg-white rounded-full p-2 shadow-lg">
+    <div id="product-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300 overflow-y-auto">
+        <div
+            class="bg-white rounded-lg shadow-2xl w-full max-w-4xl overflow-hidden animate-in fade-in zoom-in duration-300 relative my-8">
+            <button onclick="closeProductModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 z-10 bg-white rounded-full p-2 shadow-lg">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div id="product-modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
@@ -310,23 +380,26 @@
     </div>
 
     <!-- Cart Sidebar Overlay -->
-    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300" onclick="toggleCart()"></div>
-    
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300"
+        onclick="toggleCart()"></div>
+
     <!-- Cart Sidebar -->
-    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-96 bg-sand shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col border-l-4 border-gold">
+    <div id="cart-sidebar"
+        class="fixed inset-y-0 right-0 w-full md:w-96 bg-sand shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col border-l-4 border-gold">
         <div class="p-6 bg-white border-b border-gray-200 flex justify-between items-center">
             <h2 class="font-serif text-2xl font-bold text-spice-red">Your Jars</h2>
             <button onclick="toggleCart()" class="text-gray-500 hover:text-spice-red transition-colors">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
         </div>
-        
+
         <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
             <!-- Cart items injected here -->
             <div class="text-center text-gray-500 mt-10">
                 <i data-lucide="shopping-basket" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
                 <p>Your cart is empty.</p>
-                <button onclick="toggleCart()" class="mt-4 text-spice-red font-bold hover:underline">Start Shopping</button>
+                <button onclick="toggleCart()" class="mt-4 text-spice-red font-bold hover:underline">Start
+                    Shopping</button>
             </div>
         </div>
 
@@ -343,15 +416,18 @@
                 <span>Total</span>
                 <span id="cart-total">₹0</span>
             </div>
-            <button onclick="openCheckout()" class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors flex justify-center items-center gap-2">
+            <button onclick="openCheckout()"
+                class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors flex justify-center items-center gap-2">
                 Checkout <i data-lucide="credit-card" class="w-4 h-4"></i>
             </button>
         </div>
     </div>
 
     <!-- Checkout Modal -->
-    <div id="checkout-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300 overflow-y-auto">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-300 relative my-8">
+    <div id="checkout-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300 overflow-y-auto">
+        <div
+            class="bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-300 relative my-8">
             <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
                 <div class="flex items-center gap-2">
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-spice-red"></i>
@@ -361,71 +437,83 @@
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-            
+
             <!-- Step 1: Shipping Address -->
             <div id="checkout-step-1" class="p-6">
                 <h3 class="font-serif text-2xl font-bold text-spice-red mb-6 flex items-center gap-2">
-                    <span class="bg-spice-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">1</span>
+                    <span
+                        class="bg-spice-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">1</span>
                     Shipping Address
                 </h3>
                 <form id="shipping-form" onsubmit="goToPayment(event)" class="space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name *</label>
-                            <input type="text" id="shipping-name" required placeholder="John Doe" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
-                </div>
+                            <input type="text" id="shipping-name" required placeholder="John Doe"
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Phone Number *</label>
-                            <input type="tel" id="shipping-phone" required placeholder="+91 98765 43210" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                            <input type="tel" id="shipping-phone" required placeholder="+91 98765 43210"
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                         </div>
-                        </div>
-                        <div>
+                    </div>
+                    <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email Address *</label>
-                        <input type="email" id="shipping-email" required placeholder="john@example.com" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
-                        </div>
+                        <input type="email" id="shipping-email" required placeholder="john@example.com"
+                            class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Street Address *</label>
-                        <input type="text" id="shipping-address" required placeholder="House/Flat No., Building Name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
-                            </div>
+                        <input type="text" id="shipping-address" required placeholder="House/Flat No., Building Name"
+                            class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">City *</label>
-                            <input type="text" id="shipping-city" required placeholder="Mumbai" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                            <input type="text" id="shipping-city" required placeholder="Mumbai"
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">State *</label>
-                            <input type="text" id="shipping-state" required placeholder="Maharashtra" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                            <input type="text" id="shipping-state" required placeholder="Maharashtra"
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">PIN Code *</label>
-                            <input type="text" id="shipping-pincode" required placeholder="400001" maxlength="6" pattern="[0-9]{6}" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
-                            </div>
+                            <input type="text" id="shipping-pincode" required placeholder="400001" maxlength="6"
+                                pattern="[0-9]{6}"
+                                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                         </div>
-                        <div class="pt-4">
-                        <button type="submit" class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors shadow-lg flex justify-center items-center gap-2">
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit"
+                            class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors shadow-lg flex justify-center items-center gap-2">
                             Continue to Payment <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                            </button>
+                        </button>
                     </div>
                 </form>
-                    </div>
+            </div>
 
             <!-- Step 2: Payment -->
             <div id="checkout-step-2" class="hidden p-6">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="font-serif text-2xl font-bold text-spice-red flex items-center gap-2">
-                        <span class="bg-spice-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">2</span>
+                        <span
+                            class="bg-spice-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">2</span>
                         Payment Details
                     </h3>
-                    <button onclick="backToShipping()" class="text-gray-500 hover:text-spice-red text-sm flex items-center gap-1">
+                    <button onclick="backToShipping()"
+                        class="text-gray-500 hover:text-spice-red text-sm flex items-center gap-1">
                         <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
                     </button>
                 </div>
-                
+
                 <div class="bg-orange-50 p-4 rounded-md mb-6 border border-orange-100">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm text-gray-600">Subtotal</span>
                         <span id="checkout-subtotal" class="font-semibold text-gray-700">₹0</span>
-            </div>
+                    </div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm text-gray-600">Shipping</span>
                         <span id="checkout-shipping" class="font-semibold text-gray-700">₹50</span>
@@ -438,27 +526,34 @@
 
                 <div class="space-y-4">
                     <p class="text-sm text-gray-600">
-                        Choose a secure payment method. <span class="font-semibold text-spice-red">Razorpay</span> is the default option and works on both desktop and mobile (cards, UPI, wallets, netbanking).
-                        On mobile, you can also use <span class="font-semibold text-spice-red">PhonePe UPI</span> directly.
+                        Choose a secure payment method. <span class="font-semibold text-spice-red">Razorpay</span> is
+                        the default option and works on both desktop and mobile (cards, UPI, wallets, netbanking).
+                        On mobile, you can also use <span class="font-semibold text-spice-red">PhonePe UPI</span>
+                        directly.
                     </p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <button type="button" onclick="startRazorpayPayment()" class="flex items-center justify-center gap-3 border border-blue-600 text-blue-700 hover:bg-blue-50 rounded-md py-3 font-bold transition-colors bg-blue-50">
+                        <button type="button" onclick="startRazorpayPayment()"
+                            class="flex items-center justify-center gap-3 border border-blue-600 text-blue-700 hover:bg-blue-50 rounded-md py-3 font-bold transition-colors bg-blue-50">
                             <i data-lucide="credit-card" class="w-5 h-5"></i>
                             Pay with Razorpay (Recommended)
                         </button>
-                        <button id="phonepe-button" type="button" onclick="startPhonePePayment()" class="flex items-center justify-center gap-3 border border-purple-500 text-purple-700 hover:bg-purple-50 rounded-md py-3 font-bold transition-colors">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" alt="PhonePe" class="h-6 w-auto">
+                        <button id="phonepe-button" type="button" onclick="startPhonePePayment()"
+                            class="flex items-center justify-center gap-3 border border-purple-500 text-purple-700 hover:bg-purple-50 rounded-md py-3 font-bold transition-colors">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png"
+                                alt="PhonePe" class="h-6 w-auto">
                             Pay with PhonePe (UPI – Mobile Only)
                         </button>
                     </div>
 
                     <p class="text-xs text-gray-500">
-                        After completing the payment, click the button below to confirm your order and send the details to the shop. The homemaker will always verify the payment in Razorpay / PhonePe before shipping.
+                        After completing the payment, click the button below to confirm your order and send the details
+                        to the shop. The homemaker will always verify the payment in Razorpay / PhonePe before shipping.
                     </p>
 
                     <div class="pt-2">
-                        <button type="button" id="confirm-payment-btn" onclick="confirmPayment()" class="w-full bg-green-600 text-white py-3 rounded-md font-bold hover:bg-green-700 transition-colors shadow-lg flex justify-center items-center gap-2">
+                        <button type="button" id="confirm-payment-btn" onclick="confirmPayment()"
+                            class="w-full bg-green-600 text-white py-3 rounded-md font-bold hover:bg-green-700 transition-colors shadow-lg flex justify-center items-center gap-2">
                             I have completed the payment
                         </button>
                     </div>
@@ -467,7 +562,8 @@
 
             <!-- Step 3: Order Confirmation -->
             <div id="checkout-step-3" class="hidden text-center py-8 px-6">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600 animate-bounce">
+                <div
+                    class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600 animate-bounce">
                     <i data-lucide="check-circle" class="w-12 h-12"></i>
                 </div>
                 <h3 class="font-serif text-3xl font-bold text-gray-800 mb-3">Order Placed Successfully!</h3>
@@ -493,15 +589,18 @@
                     </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center mb-4">
-                    <button onclick="closeCheckout()" class="bg-spice-red text-white px-8 py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
+                    <button onclick="closeCheckout()"
+                        class="bg-spice-red text-white px-8 py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
                         Continue Shopping
                     </button>
-                    <a id="order-whatsapp-link" href="#" target="_blank" class="bg-green-500 text-white px-8 py-3 rounded-md font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
+                    <a id="order-whatsapp-link" href="#" target="_blank"
+                        class="bg-green-500 text-white px-8 py-3 rounded-md font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
                         <i data-lucide="message-circle" class="w-4 h-4"></i> Send on WhatsApp
                     </a>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a id="order-email-link" href="#" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-md font-bold hover:bg-gray-300 transition-colors flex items-center justify-center gap-2">
+                    <a id="order-email-link" href="#"
+                        class="bg-gray-200 text-gray-800 px-8 py-3 rounded-md font-bold hover:bg-gray-300 transition-colors flex items-center justify-center gap-2">
                         <i data-lucide="mail" class="w-4 h-4"></i> Send Order by Email
                     </a>
                 </div>
@@ -717,7 +816,7 @@
         // Scroll Animation - Initialized early to be available for renderProducts
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) entry.target.classList.add('active');
+                if (entry.isIntersecting) entry.target.classList.add('active');
             });
         }, { threshold: 0.1 });
 
@@ -730,10 +829,10 @@
                     stars += `<svg class="w-3 h-3 text-gold fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
                 } else if (i - 0.5 === rating) {
                     // Half Star (Approximated with simple logic for now, or just use full/empty)
-                     stars += `<svg class="w-3 h-3 text-gold fill-current opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+                    stars += `<svg class="w-3 h-3 text-gold fill-current opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
                 } else {
                     // Empty Star
-                     stars += `<svg class="w-3 h-3 text-gray-300 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+                    stars += `<svg class="w-3 h-3 text-gray-300 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
                 }
             }
             return `<div class="flex items-center justify-center gap-0.5 mt-1 mb-2">${stars}</div>`;
@@ -796,7 +895,7 @@
                 const selectionText = selections.length > 0
                     ? selections.map(sel => `${product.variants[sel.variantIndex].label} × ${sel.qty}`).join(', ')
                     : '';
-                
+
                 return `
                 <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover indian-border bg-white reveal" style="animation-delay: ${index * 100}ms">
                     <div class="relative h-56 overflow-hidden bg-gray-200 group cursor-pointer" onclick="cardOpenDetails(${product.id})">
@@ -824,7 +923,7 @@
                     </div>
                 </div>
             `}).join('');
-            
+
             // Re-observe animations for new elements
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
             lucide.createIcons();
@@ -868,12 +967,12 @@
             const product = products.find(p => p.id === productId);
             const el = document.getElementById(`card-selection-${productId}`);
             if (!el || !product) return;
-            
+
             if (selections.length === 0) {
                 el.textContent = '';
                 return;
             }
-            
+
             const summary = selections.map(sel => {
                 const variant = product.variants[sel.variantIndex];
                 return `${variant.label} × ${sel.qty}`;
@@ -887,23 +986,14 @@
 
         function cardAddToCart(productId, event) {
             if (event) event.stopPropagation();
-            const selections = selectedOptions[productId] || [];
-            if (selections.length === 0) {
-                // Force user to choose weight & qty first - open details modal
-                showProductDetails(productId);
-                return;
-            }
-            // Add all selected combinations to cart
-            selections.forEach(sel => {
-                addToCartWithSelection(productId, sel.variantIndex, sel.qty);
-            });
+            showProductDetails(productId);
         }
 
         function toggleCart() {
             const sidebar = document.getElementById('cart-sidebar');
             const overlay = document.getElementById('cart-overlay');
             const isOpen = !sidebar.classList.contains('translate-x-full');
-            
+
             if (!isOpen) {
                 sidebar.classList.remove('translate-x-full');
                 overlay.classList.remove('hidden');
@@ -932,10 +1022,10 @@
                     variantLabel: variant.label,
                 });
             }
-            
+
             updateCartUI();
             showToast(`Added ${product.name} (${variant.label} × ${quantity}) to cart`);
-            
+
             // Animate Badge
             const badge = document.getElementById('cart-badge');
             badge.classList.remove('scale-0');
@@ -945,10 +1035,22 @@
 
         function updateQty(id, delta) {
             const item = cart.find(i => i.id === id);
-            if(item) {
+            if (item) {
                 item.qty += delta;
-                if(item.qty <= 0) cart = cart.filter(i => i.id !== id);
+                if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
                 updateCartUI();
+            }
+        }
+
+        function confirmRemoveItem(index, event) {
+            if (event) event.stopPropagation();
+            const item = cart[index];
+            if (!item) return;
+            
+            if (confirm(`Are you sure you want to remove "${item.name} (${item.variantLabel || ''})" from your cart?`)) {
+                cart.splice(index, 1);
+                updateCartUI();
+                showToast(`${item.name} removed from cart`);
             }
         }
 
@@ -958,24 +1060,24 @@
             const totalEl = document.getElementById('cart-total');
             const subtotalEl = document.getElementById('cart-subtotal');
             const shippingEl = document.getElementById('cart-shipping');
-            
+
             const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
             const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
             const shipping = cart.length > 0 ? SHIPPING_COST : 0;
             const total = subtotal + shipping;
-            
+
             badge.innerText = totalQty;
             if (totalQty === 0) {
                 badge.classList.add('scale-0', 'opacity-0');
             } else {
                 badge.classList.remove('scale-0', 'opacity-0');
             }
-            
+
             totalEl.innerText = `₹${total}`;
             subtotalEl.innerText = `₹${subtotal}`;
             shippingEl.innerText = cart.length > 0 ? `₹${shipping}` : '₹0';
 
-            if(cart.length === 0) {
+            if (cart.length === 0) {
                 container.innerHTML = `
                     <div class="text-center text-gray-500 mt-10">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 opacity-50"><path d="m21 16-1.247-6.859c-.27-1.482-1.602-2.52-3.107-2.392l-4.996.42c-1.233.103-2.18 1.147-2.18 2.392v6.237c0 .553.448 1.002 1 1.002h9.53c.552 0 1-.449 1-1.002Z"/><path d="M5.5 21a2.5 2.5 0 0 0 2.5-2.5V8.857c0-1.57 1.35-2.8 2.915-2.663l5.064.445"/><path d="M2 7h20"/></svg>
@@ -983,8 +1085,9 @@
                         <button onclick="toggleCart()" class="mt-4 text-spice-red font-bold hover:underline">Keep Shopping</button>
                     </div>`;
             } else {
-                container.innerHTML = cart.map(item => `
-                    <div class="flex items-center gap-4 bg-white p-3 rounded-md shadow-sm border border-gray-100 animate-in fade-in slide-in-from-right-4 duration-300">
+                container.innerHTML = cart.map((item, index) => {
+                    return `
+                    <div class="group relative flex items-center gap-4 bg-white p-3 rounded-md shadow-sm border border-gray-100 animate-in fade-in slide-in-from-right-4 duration-300 hover:border-spice-red/30 transition-all duration-200 overflow-hidden pr-12">
                         <img src="${item.image}" onerror="this.src='${fallbackImg}'" class="w-14 h-14 object-cover rounded-md">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-bold text-gray-800 text-sm truncate">${item.name}</h4>
@@ -995,8 +1098,15 @@
                             <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
                             <button onclick="updateQty(${item.id}, 1)" class="px-2 py-1 hover:text-spice-red">+</button>
                         </div>
+                        <div class="absolute top-0 right-0 h-full w-12 flex items-center justify-center">
+                            <div class="absolute right-0 top-0 bottom-0 w-1 bg-spice-red opacity-0 group-hover:opacity-100 transform translate-x-full group-hover:translate-x-0 transition-all duration-300 rounded-r-md"></div>
+                            <button onclick="confirmRemoveItem(${index}, event)" class="relative z-10 bg-spice-red text-white rounded-full p-2 hover:bg-red-700 transition-all shadow-lg transform scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 duration-200 flex items-center justify-center">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
-                `).join('');
+                `;
+                }).join('');
             }
             lucide.createIcons();
         }
@@ -1006,7 +1116,7 @@
         const SHIPPING_COST = 50;
 
         function openCheckout() {
-            if(cart.length === 0) {
+            if (cart.length === 0) {
                 showToast("Your cart is empty!");
                 return;
             }
@@ -1056,7 +1166,7 @@
         function updateCheckoutTotals() {
             const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
             const total = subtotal + SHIPPING_COST;
-            
+
             document.getElementById('checkout-subtotal').innerText = `₹${subtotal}`;
             document.getElementById('checkout-shipping').innerText = `₹${SHIPPING_COST}`;
             document.getElementById('checkout-total').innerText = `₹${total}`;
@@ -1086,7 +1196,7 @@
             }
             selectedPaymentMethod = 'PhonePe UPI';
             const { total } = getOrderSnapshot();
-            const upiUrl = `upi://pay?pa=${encodeURIComponent(STORE_UPI_ID)}&pn=${encodeURIComponent('Achar Heritage')}&am=${encodeURIComponent(total)}&cu=INR&tn=${encodeURIComponent('Pickle Order Payment')}`;
+            const upiUrl = `upi://pay?pa=${encodeURIComponent(STORE_UPI_ID)}&pn=${encodeURIComponent('Sri Pickles')}&am=${encodeURIComponent(total)}&cu=INR&tn=${encodeURIComponent('Pickle Order Payment')}`;
             // Open PhonePe / UPI app (only on mobile devices with UPI apps installed)
             if (isMobileDevice()) {
                 window.location.href = upiUrl;
@@ -1113,7 +1223,7 @@
                 key: RAZORPAY_KEY_ID,
                 amount: snapshot.total * 100, // in paise
                 currency: "INR",
-                name: "Achar Heritage",
+                name: "Sri Pickles",
                 description: "Order Payment",
                 handler: function (response) {
                     showToast('Razorpay payment completed.');
@@ -1184,7 +1294,7 @@ ${addressBlock}`;
             }
 
             if (STORE_EMAIL && STORE_EMAIL !== 'orders@example.com') {
-                const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent('New Achar Heritage Order ' + orderId)}&body=${encodeURIComponent(body)}`;
+                const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent('New Sri Pickles Order ' + orderId)}&body=${encodeURIComponent(body)}`;
                 document.getElementById('order-email-link').href = mailUrl;
             } else {
                 document.getElementById('order-email-link').href = '#';
@@ -1195,8 +1305,8 @@ ${addressBlock}`;
             document.getElementById('checkout-step-3').classList.remove('hidden');
 
             // Clear cart
-                cart = [];
-                updateCartUI();
+            cart = [];
+            updateCartUI();
 
             showToast("Order placed successfully! Now send it via WhatsApp or Email.");
         }
@@ -1211,12 +1321,12 @@ ${addressBlock}`;
             ensureSelection(id);
             currentModalProductId = id;
             currentTempSelection = { variantIndex: null, qty: 1 };
-            
+
             const modal = document.getElementById('product-modal');
             const content = document.getElementById('product-modal-content');
             const basePrice = product.variants[0]?.price || 0;
             const existingSelections = selectedOptions[id] || [];
-            
+
             content.innerHTML = `
                 <div class="relative h-96 md:h-full bg-gray-100 rounded-lg overflow-hidden">
                     <img src="${product.image}" onerror="this.src='${fallbackImg}'" alt="${product.name}" class="w-full h-full object-cover">
@@ -1264,12 +1374,12 @@ ${addressBlock}`;
                             ${existingSelections.length > 0 ? `
                                 <h4 class="text-sm font-semibold text-gray-700 mb-2">Selected Combinations:</h4>
                                 ${existingSelections.map((sel, idx) => {
-                                    const variant = product.variants[sel.variantIndex];
-                                    return `<div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-200">
+                const variant = product.variants[sel.variantIndex];
+                return `<div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-200">
                                         <span class="text-sm">${variant.label} × ${sel.qty}</span>
                                         <button onclick="removeCombination(${id}, ${idx})" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
                                     </div>`;
-                                }).join('')}
+            }).join('')}
                             ` : ''}
                         </div>
                     </div>
@@ -1280,9 +1390,9 @@ ${addressBlock}`;
                         ${existingSelections.length > 0 ? `
                             <div class="font-semibold mb-1">Selected Items:</div>
                             ${existingSelections.map(sel => {
-                                const variant = product.variants[sel.variantIndex];
-                                return `<div class="text-xs">${variant.label} × ${sel.qty}</div>`;
-                            }).join('')}
+                const variant = product.variants[sel.variantIndex];
+                return `<div class="text-xs">${variant.label} × ${sel.qty}</div>`;
+            }).join('')}
                         ` : ''}
                     </div>
                     <div class="pt-4 flex flex-col sm:flex-row gap-3">
@@ -1295,7 +1405,7 @@ ${addressBlock}`;
                     </div>
                 </div>
             `;
-            
+
             modal.classList.remove('hidden');
             lucide.createIcons();
             updateModalSelectionUI(id);
@@ -1398,7 +1508,7 @@ ${addressBlock}`;
             const product = products.find(p => p.id === productId);
             if (!product) return;
             const selections = selectedOptions[productId] || [];
-            
+
             // Update selected combinations display
             const container = document.getElementById(`selected-combinations-${productId}`);
             if (container) {
@@ -1406,12 +1516,12 @@ ${addressBlock}`;
                     container.innerHTML = `
                         <h4 class="text-sm font-semibold text-gray-700 mb-2">Selected Combinations:</h4>
                         ${selections.map((sel, idx) => {
-                            const variant = product.variants[sel.variantIndex];
-                            return `<div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-200">
+                        const variant = product.variants[sel.variantIndex];
+                        return `<div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-200">
                                 <span class="text-sm">${variant.label} × ${sel.qty}</span>
                                 <button onclick="removeCombination(${productId}, ${idx})" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
                             </div>`;
-                        }).join('')}
+                    }).join('')}
                     `;
                 } else {
                     container.innerHTML = '';
@@ -1425,9 +1535,9 @@ ${addressBlock}`;
                     summaryEl.innerHTML = `
                         <div class="font-semibold mb-1">Selected Items:</div>
                         ${selections.map(sel => {
-                            const variant = product.variants[sel.variantIndex];
-                            return `<div class="text-xs">${variant.label} × ${sel.qty}</div>`;
-                        }).join('')}
+                        const variant = product.variants[sel.variantIndex];
+                        return `<div class="text-xs">${variant.label} × ${sel.qty}</div>`;
+                    }).join('')}
                     `;
                 } else {
                     summaryEl.innerHTML = '';
@@ -1511,7 +1621,7 @@ Note: This is a small business. Prices vary as raw ingredients are locally sourc
         // Close modal on overlay click
         const productModal = document.getElementById('product-modal');
         if (productModal) {
-            productModal.addEventListener('click', function(e) {
+            productModal.addEventListener('click', function (e) {
                 if (e.target === this) {
                     closeProductModal();
                 }
@@ -1529,4 +1639,5 @@ Note: This is a small business. Prices vary as raw ingredients are locally sourc
         }
     </script>
 </body>
+
 </html>
