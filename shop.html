@@ -14,6 +14,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Razorpay Checkout -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -168,17 +171,12 @@
                         </li>
                         <li>
                             <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
-                                <input type="radio" name="category" value="Pickle" onchange="filterProducts()" class="accent-spice-red"> Traditional Pickles
+                                <input type="radio" name="category" value="Veg" onchange="filterProducts()" class="accent-spice-red"> Veg Pickles & Podi
                             </label>
                         </li>
                         <li>
                             <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
-                                <input type="radio" name="category" value="Chutney" onchange="filterProducts()" class="accent-spice-red"> Chutneys (Sweet/Spicy)
-                            </label>
-                        </li>
-                        <li>
-                            <label class="flex items-center gap-2 cursor-pointer hover:text-spice-red">
-                                <input type="radio" name="category" value="Spices" onchange="filterProducts()" class="accent-spice-red"> Dry Spices
+                                <input type="radio" name="category" value="Non Veg" onchange="filterProducts()" class="accent-spice-red"> Non-Veg Pickles
                             </label>
                         </li>
                     </ul>
@@ -193,13 +191,29 @@
                         <option value="price-high">Price: High to Low</option>
                     </select>
                 </div>
+
+                <!-- Bulk Ordering Section -->
+                <div class="pt-4 border-t border-gold/30">
+                    <h4 class="font-bold text-gray-800 mb-2 border-b border-gold/30 pb-1">Bulk Orders</h4>
+                    <p class="text-xs text-gray-600 mb-3">No price structure for bulk orders. Leave contact info for custom quote.</p>
+                    <p class="text-xs text-gray-500 italic mb-3">Small business - prices vary as raw ingredients are locally sourced.</p>
+                    <button onclick="openBulkOrderForm()" class="w-full bg-gold text-spice-red px-4 py-2 rounded-md font-bold hover:bg-yellow-500 transition-colors text-sm">
+                        Request Bulk Quote
+                    </button>
+                </div>
             </div>
         </aside>
 
         <!-- Product Grid Area -->
         <main class="w-full lg:w-3/4">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
                 <p class="text-gray-500 text-sm italic">Showing <span id="product-count" class="font-bold text-spice-red">0</span> products</p>
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="text-gray-600 mr-1">Quick Filter:</span>
+                    <button type="button" onclick="setCategoryFilter('all')" class="px-3 py-1 rounded-full border text-xs md:text-sm border-gold text-spice-red bg-gold/10 hover:bg-gold/20 transition-colors">All</button>
+                    <button type="button" onclick="setCategoryFilter('Veg')" class="px-3 py-1 rounded-full border text-xs md:text-sm border-emerald-500 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors">Veg</button>
+                    <button type="button" onclick="setCategoryFilter('Non Veg')" class="px-3 py-1 rounded-full border text-xs md:text-sm border-red-500 text-red-700 bg-red-50 hover:bg-red-100 transition-colors">Non-Veg</button>
+                </div>
             </div>
 
             <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -247,8 +261,53 @@
         </div>
     </footer>
 
-    <!-- Toast Notifications Container -->
-    <div id="toast-container" class="fixed bottom-4 right-4 z-[70] flex flex-col gap-2"></div>
+    <!-- Toast Notifications Container (moved to top so it doesn't block cart/checkout) -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[70] flex flex-col gap-2"></div>
+
+    <!-- Bulk Order Modal -->
+    <div id="bulk-order-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300 relative">
+            <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="font-serif text-xl font-bold text-spice-red">Bulk Order Inquiry</h3>
+                <button onclick="closeBulkOrderForm()" class="text-gray-400 hover:text-gray-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="bulk-order-form" onsubmit="submitBulkOrder(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Name *</label>
+                    <input type="text" id="bulk-name" required placeholder="Your Name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Phone Number *</label>
+                    <input type="tel" id="bulk-phone" required placeholder="+91 98765 43210" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email *</label>
+                    <input type="email" id="bulk-email" required placeholder="your@email.com" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Quantity & Items Needed</label>
+                    <textarea id="bulk-details" rows="4" placeholder="E.g., 50kg Mango Pickle, 30kg Chicken Pickle..." class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
+                    Submit Inquiry
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300 overflow-y-auto">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl overflow-hidden animate-in fade-in zoom-in duration-300 relative my-8">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 z-10 bg-white rounded-full p-2 shadow-lg">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="product-modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
 
     <!-- Cart Sidebar Overlay -->
     <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300" onclick="toggleCart()"></div>
@@ -272,11 +331,15 @@
         </div>
 
         <div class="p-6 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-            <div class="flex justify-between mb-2 text-gray-600">
+            <div class="flex justify-between mb-2 text-gray-600 text-sm">
                 <span>Subtotal</span>
                 <span id="cart-subtotal">₹0</span>
             </div>
-            <div class="flex justify-between mb-4 text-xl font-bold text-spice-red">
+            <div class="flex justify-between mb-2 text-gray-600 text-sm">
+                <span>Shipping</span>
+                <span id="cart-shipping">₹50</span>
+            </div>
+            <div class="flex justify-between mb-4 pt-2 border-t border-gray-200 text-xl font-bold text-spice-red">
                 <span>Total</span>
                 <span id="cart-total">₹0</span>
             </div>
@@ -286,57 +349,161 @@
         </div>
     </div>
 
-    <!-- Payment Modal -->
-    <div id="payment-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300 relative">
-            <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center">
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 transition-all duration-300 overflow-y-auto">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-300 relative my-8">
+            <div class="bg-gray-50 p-4 border-b border-gray-200 flex justify-between items-center sticky top-0 z-10">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="lock" class="w-4 h-4 text-green-600"></i>
-                    <span class="font-bold text-gray-700">Secure Payment</span>
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-spice-red"></i>
+                    <span class="font-bold text-gray-700">Checkout</span>
                 </div>
                 <button onclick="closeCheckout()" class="text-gray-400 hover:text-gray-700">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-            <div class="p-6">
-                <div class="bg-orange-50 p-3 rounded-md mb-6 border border-orange-100 flex justify-between items-center">
-                    <span class="text-sm text-gray-600">Total Amount</span>
-                    <span id="payment-total" class="font-bold text-spice-red text-lg">₹0</span>
+            
+            <!-- Step 1: Shipping Address -->
+            <div id="checkout-step-1" class="p-6">
+                <h3 class="font-serif text-2xl font-bold text-spice-red mb-6 flex items-center gap-2">
+                    <span class="bg-spice-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">1</span>
+                    Shipping Address
+                </h3>
+                <form id="shipping-form" onsubmit="goToPayment(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name *</label>
+                            <input type="text" id="shipping-name" required placeholder="John Doe" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                 </div>
-                <form id="payment-form" onsubmit="processPayment(event)">
-                    <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Card Holder Name</label>
-                            <input type="text" required placeholder="Name on Card" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Phone Number *</label>
+                            <input type="tel" id="shipping-phone" required placeholder="+91 98765 43210" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Card Number</label>
-                            <input type="text" required placeholder="0000 0000 0000 0000" maxlength="19" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email Address *</label>
+                        <input type="email" id="shipping-email" required placeholder="john@example.com" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                         </div>
-                        <div class="flex gap-4">
-                            <div class="w-1/2">
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Expiry</label>
-                                <input type="text" required placeholder="MM/YY" maxlength="5" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Street Address *</label>
+                        <input type="text" id="shipping-address" required placeholder="House/Flat No., Building Name" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                             </div>
-                            <div class="w-1/2">
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">CVV</label>
-                                <input type="password" required placeholder="123" maxlength="3" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">City *</label>
+                            <input type="text" id="shipping-city" required placeholder="Mumbai" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">State *</label>
+                            <input type="text" id="shipping-state" required placeholder="Maharashtra" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">PIN Code *</label>
+                            <input type="text" id="shipping-pincode" required placeholder="400001" maxlength="6" pattern="[0-9]{6}" class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
                             </div>
                         </div>
                         <div class="pt-4">
-                            <button type="submit" id="pay-btn" class="w-full bg-green-600 text-white py-3 rounded-md font-bold hover:bg-green-700 transition-colors shadow-lg flex justify-center items-center gap-2">
-                                Pay Now
+                        <button type="submit" class="w-full bg-spice-red text-white py-3 rounded-md font-bold hover:bg-red-700 transition-colors shadow-lg flex justify-center items-center gap-2">
+                            Continue to Payment <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
-                        </div>
                     </div>
                 </form>
-                <div id="payment-success" class="hidden text-center py-8">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 animate-bounce">
-                        <i data-lucide="check" class="w-8 h-8"></i>
                     </div>
-                    <h3 class="font-serif text-2xl font-bold text-gray-800 mb-2">Payment Successful!</h3>
-                    <p class="text-gray-600 text-sm mb-6">Your order has been placed successfully.</p>
-                    <button onclick="closeCheckout()" class="bg-gray-800 text-white px-6 py-2 rounded-full font-bold hover:bg-black transition-colors">Close</button>
+
+            <!-- Step 2: Payment -->
+            <div id="checkout-step-2" class="hidden p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-serif text-2xl font-bold text-spice-red flex items-center gap-2">
+                        <span class="bg-spice-red text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">2</span>
+                        Payment Details
+                    </h3>
+                    <button onclick="backToShipping()" class="text-gray-500 hover:text-spice-red text-sm flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+                    </button>
+                </div>
+                
+                <div class="bg-orange-50 p-4 rounded-md mb-6 border border-orange-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-600">Subtotal</span>
+                        <span id="checkout-subtotal" class="font-semibold text-gray-700">₹0</span>
+            </div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-600">Shipping</span>
+                        <span id="checkout-shipping" class="font-semibold text-gray-700">₹50</span>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-orange-200">
+                        <span class="font-bold text-gray-800">Total Amount</span>
+                        <span id="checkout-total" class="font-bold text-spice-red text-lg">₹0</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-600">
+                        Choose a secure payment method. <span class="font-semibold text-spice-red">Razorpay</span> is the default option and works on both desktop and mobile (cards, UPI, wallets, netbanking).
+                        On mobile, you can also use <span class="font-semibold text-spice-red">PhonePe UPI</span> directly.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button type="button" onclick="startRazorpayPayment()" class="flex items-center justify-center gap-3 border border-blue-600 text-blue-700 hover:bg-blue-50 rounded-md py-3 font-bold transition-colors bg-blue-50">
+                            <i data-lucide="credit-card" class="w-5 h-5"></i>
+                            Pay with Razorpay (Recommended)
+                        </button>
+                        <button id="phonepe-button" type="button" onclick="startPhonePePayment()" class="flex items-center justify-center gap-3 border border-purple-500 text-purple-700 hover:bg-purple-50 rounded-md py-3 font-bold transition-colors">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png" alt="PhonePe" class="h-6 w-auto">
+                            Pay with PhonePe (UPI – Mobile Only)
+                        </button>
+                    </div>
+
+                    <p class="text-xs text-gray-500">
+                        After completing the payment, click the button below to confirm your order and send the details to the shop. The homemaker will always verify the payment in Razorpay / PhonePe before shipping.
+                    </p>
+
+                    <div class="pt-2">
+                        <button type="button" id="confirm-payment-btn" onclick="confirmPayment()" class="w-full bg-green-600 text-white py-3 rounded-md font-bold hover:bg-green-700 transition-colors shadow-lg flex justify-center items-center gap-2">
+                            I have completed the payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Order Confirmation -->
+            <div id="checkout-step-3" class="hidden text-center py-8 px-6">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600 animate-bounce">
+                    <i data-lucide="check-circle" class="w-12 h-12"></i>
+                </div>
+                <h3 class="font-serif text-3xl font-bold text-gray-800 mb-3">Order Placed Successfully!</h3>
+                <p class="text-gray-600 mb-2">Thank you for your purchase.</p>
+                <div class="bg-gray-50 p-4 rounded-md mb-6 mt-6 text-left">
+                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-gray-200">
+                        <span class="text-sm text-gray-600">Order ID:</span>
+                        <span id="order-id" class="font-bold text-spice-red">#ACH-2024-0000</span>
+                    </div>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Items:</span>
+                            <span id="order-items-count" class="font-semibold">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Amount:</span>
+                            <span id="order-total" class="font-bold text-spice-red">₹0</span>
+                        </div>
+                        <div class="flex justify-between pt-2 border-t border-gray-200">
+                            <span class="text-gray-600">Estimated Delivery:</span>
+                            <span class="font-semibold text-mango-green">3-5 Business Days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+                    <button onclick="closeCheckout()" class="bg-spice-red text-white px-8 py-3 rounded-md font-bold hover:bg-red-700 transition-colors">
+                        Continue Shopping
+                    </button>
+                    <a id="order-whatsapp-link" href="#" target="_blank" class="bg-green-500 text-white px-8 py-3 rounded-md font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> Send on WhatsApp
+                    </a>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a id="order-email-link" href="#" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-md font-bold hover:bg-gray-300 transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="mail" class="w-4 h-4"></i> Send Order by Email
+                    </a>
                 </div>
             </div>
         </div>
@@ -345,19 +512,207 @@
     <script>
         lucide.createIcons();
 
-        // Extended Product Data with Ratings and Original Prices
+        // === SIMPLE CONFIG (EDIT THESE VALUES FOR YOUR SHOP) ===
+        // WhatsApp number for order notifications (include country code, no + sign, e.g. 91XXXXXXXXXX)
+        const STORE_WHATSAPP_NUMBER = '916379243495'; // TODO: replace with homemaker's WhatsApp number
+        // Email address for order notifications
+        const STORE_EMAIL = 'iamajoyag@gmail.com'; // TODO: replace with homemaker's email
+        // UPI ID that receives PhonePe payments
+        const STORE_UPI_ID = 'ajoyag06@okhdfcbank'; // TODO: replace with homemaker's UPI ID
+        // Razorpay Key ID (from Razorpay dashboard). Use test key while developing.
+        const RAZORPAY_KEY_ID = 'rzp_test_yourkeyhere'; // TODO: replace with real Razorpay key
+
+        // Menu-based product data with variants (weights & prices)
         const products = [
-            { id: 1, name: "Spicy Mango Achar", price: 349, originalPrice: 399, category: "Pickle", weight: "500g", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop", tag: "Bestseller", rating: 5 },
-            { id: 2, name: "Lemon & Green Chilli", price: 299, category: "Pickle", weight: "400g", image: "https://t3.ftcdn.net/jpg/04/41/27/93/360_F_441279318_K0ZtWd9rXq1B2Q1t5W1W6X2X3Y4Z5.jpg", tag: "Tangy", rating: 4 },
-            { id: 3, name: "Garlic & Ginger Mix", price: 399, originalPrice: 450, category: "Pickle", weight: "500g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_x_y_z_1_2_3_4_5_6_7_8_9_0&s", tag: "Immunity", rating: 5 },
-            { id: 4, name: "Sweet Lime Chutney", price: 249, category: "Chutney", weight: "300g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_a_b_c_d_e_f_g_h_i_j_k_l_m_n&s", tag: "Kids Favorite", rating: 4.5 },
-            { id: 5, name: "Stuffed Red Chilli", price: 449, category: "Pickle", weight: "500g", image: "https://thumbs.dreamstime.com/b/stuffed-red-chilli-pickle-bharwa-mirch-ka-achar-indian-traditional-food-vanarasi-style-isolated-white-background-200373070.jpg", tag: "Spicy", rating: 5 },
-            { id: 6, name: "Gonda (Lasoda) Pickle", price: 320, category: "Pickle", weight: "400g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dummy_url_for_lasoda&s", tag: "Seasonal", rating: 4 },
-            { id: 7, name: "Imli (Tamarind) Chutney", price: 199, originalPrice: 220, category: "Chutney", weight: "250g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dummy_url_for_imli&s", tag: "Sweet & Sour", rating: 4.5 },
-            { id: 8, name: "Kashmiri Chilli Powder", price: 150, category: "Spices", weight: "100g", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_dummy_url_for_spices&s", tag: "Premium", rating: 5 },
+            // Veg
+            {
+                id: 1,
+                name: "Tomato Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 4.5,
+                description: "Homestyle Andhra-style tomato pickle with balanced tang and spice.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 2,
+                name: "Mango Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1598514983088-d446927dfb3d?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 5,
+                description: "Classic mango pickle with traditional spices and cold-pressed oil.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 3,
+                name: "Lemon Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1606914501449-5a96b6ce24ca?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 4.5,
+                description: "Tangy and spicy lemon pickle that goes well with rice and curd.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 4,
+                name: "Tamarind Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1588190335456-1666e4ac2a14?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 4.5,
+                description: "Rich tamarind pickle with a deep, tangy flavour.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 5,
+                name: "Gongura Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 5,
+                description: "Authentic gongura (sorrel leaves) pickle with bold Andhra flavours.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 6,
+                name: "Usirikaya (Gooseberry) Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1606914501449-5a96b6ce24ca?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 4.5,
+                description: "Healthy gooseberry pickle rich in Vitamin C and flavour.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 7,
+                name: "Cauliflower Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1584270354949-c26b0fd8f13b?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 4.5,
+                description: "Crunchy cauliflower pickle with homemade masala.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 150 },
+                    { label: "500 g", weight: "500 g", price: 250 },
+                    { label: "1 kg", weight: "1 kg", price: 500 },
+                ],
+            },
+            {
+                id: 8,
+                name: "Kakarakaya Podi",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1615937691194-96f162e8b09a?q=80&w=600&auto=format&fit=crop",
+                tag: "Podi",
+                rating: 4.5,
+                description: "Bitter gourd spice podi, perfect with hot rice and ghee.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 250 },
+                    { label: "600 g", weight: "600 g", price: 500 },
+                    { label: "1 kg", weight: "1 kg", price: 1000 },
+                ],
+            },
+            {
+                id: 9,
+                name: "Drumstick Pickle",
+                category: "Veg",
+                image: "https://images.unsplash.com/photo-1613274921513-4cf245073a4d?q=80&w=600&auto=format&fit=crop",
+                tag: "Veg",
+                rating: 4.5,
+                description: "Unique drumstick pickle with home-style masala.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 270 },
+                    { label: "600 g", weight: "600 g", price: 550 },
+                ],
+            },
+
+            // Non Veg
+            {
+                id: 10,
+                name: "Chicken Pickle",
+                category: "Non Veg",
+                image: "https://images.unsplash.com/photo-1604908176997-1251884b08a5?q=80&w=600&auto=format&fit=crop",
+                tag: "Non Veg",
+                rating: 5,
+                description: "Spicy Andhra-style chicken pickle, ready-to-eat with rice or rotis.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 250 },
+                    { label: "500 g", weight: "500 g", price: 450 },
+                    { label: "1 kg", weight: "1 kg", price: 900 },
+                ],
+            },
+            {
+                id: 11,
+                name: "Mutton Pickle",
+                category: "Non Veg",
+                image: "https://images.unsplash.com/photo-1604908176997-1251884b08a5?q=80&w=600&auto=format&fit=crop",
+                tag: "Non Veg",
+                rating: 5,
+                description: "Rich and spicy mutton pickle for true meat lovers.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 500 },
+                    { label: "500 g", weight: "500 g", price: 1000 },
+                    { label: "1 kg", weight: "1 kg", price: 2000 },
+                ],
+            },
+            {
+                id: 12,
+                name: "Fish Pickle",
+                category: "Non Veg",
+                image: "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?q=80&w=600&auto=format&fit=crop",
+                tag: "Non Veg",
+                rating: 4.5,
+                description: "Coastal style fish pickle with bold spices and tang.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 600 },
+                    { label: "500 g", weight: "500 g", price: 1200 },
+                ],
+            },
+            {
+                id: 13,
+                name: "Prawn Pickle",
+                category: "Non Veg",
+                image: "https://images.unsplash.com/photo-1604908553954-0014f028ec5f?q=80&w=600&auto=format&fit=crop",
+                tag: "Non Veg",
+                rating: 4.5,
+                description: "Juicy prawn pickle with a perfect balance of spice and flavour.",
+                variants: [
+                    { label: "250 g", weight: "250 g", price: 650 },
+                    { label: "500 g", weight: "500 g", price: 1300 },
+                ],
+            },
         ];
 
         const fallbackImg = "https://placehold.co/600x400/B9382E/FFF?text=Achar+Heritage";
+
+        // Stores multiple selected weight & quantity combinations per product
+        // Format: { productId: [{ variantIndex: 0, qty: 2 }, { variantIndex: 1, qty: 1 }] }
+        const selectedOptions = {};
 
         // Scroll Animation - Initialized early to be available for renderProducts
         const observer = new IntersectionObserver((entries) => {
@@ -396,9 +751,12 @@
                 return matchesSearch && matchesCategory;
             });
 
-            // Sorting
-            if (sort === 'price-low') filtered.sort((a, b) => a.price - b.price);
-            else if (sort === 'price-high') filtered.sort((a, b) => b.price - a.price);
+            // Sorting (by first variant price)
+            if (sort === 'price-low') {
+                filtered.sort((a, b) => (a.variants[0]?.price || 0) - (b.variants[0]?.price || 0));
+            } else if (sort === 'price-high') {
+                filtered.sort((a, b) => (b.variants[0]?.price || 0) - (a.variants[0]?.price || 0));
+            }
 
             renderProducts(filtered);
         }
@@ -408,6 +766,14 @@
             document.querySelector('input[name="category"][value="all"]').checked = true;
             document.getElementById('sort-select').value = 'featured';
             filterProducts();
+        }
+
+        function setCategoryFilter(value) {
+            const radio = document.querySelector(`input[name="category"][value="${value}"]`);
+            if (radio) {
+                radio.checked = true;
+                filterProducts();
+            }
         }
 
         function renderProducts(items) {
@@ -425,30 +791,35 @@
 
             noResults.classList.add('hidden');
             grid.innerHTML = items.map((product, index) => {
-                const discount = product.originalPrice ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+                const basePrice = product.variants[0]?.price || 0;
+                const selections = selectedOptions[product.id] || [];
+                const selectionText = selections.length > 0
+                    ? selections.map(sel => `${product.variants[sel.variantIndex].label} × ${sel.qty}`).join(', ')
+                    : '';
                 
                 return `
                 <div class="bg-white rounded-lg overflow-hidden shadow-md card-hover indian-border bg-white reveal" style="animation-delay: ${index * 100}ms">
-                    <div class="relative h-56 overflow-hidden bg-gray-200 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-200 group cursor-pointer" onclick="cardOpenDetails(${product.id})">
                         <img src="${product.image}" onerror="this.src='${fallbackImg}'" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
                         <div class="absolute top-2 right-2 flex flex-col items-end gap-1">
                             <span class="bg-gold text-white text-xs font-bold px-2 py-1 rounded shadow">${product.tag}</span>
-                            ${discount > 0 ? `<span class="bg-spice-red text-white text-xs font-bold px-2 py-1 rounded shadow animate-pulse">-${discount}% OFF</span>` : ''}
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity flex justify-center">
-                            <button onclick="addToCart(${product.id})" class="bg-spice-red text-white px-6 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
-                                Add to Cart <i data-lucide="plus" class="w-4 h-4"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="p-4 text-center">
                         <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">${product.category}</div>
-                        <h3 class="font-serif text-lg font-bold text-gray-800 leading-tight">${product.name}</h3>
+                        <h3 class="font-serif text-lg font-bold text-gray-800 leading-tight hover:text-spice-red transition-colors cursor-pointer" onclick="cardOpenDetails(${product.id})">${product.name}</h3>
                         ${renderStars(product.rating)}
-                        <p class="text-sm text-gray-500 mb-2">${product.weight}</p>
-                        <div class="flex items-center justify-center gap-2">
-                            <span class="text-xl font-bold text-spice-red">₹${product.price}</span>
-                            ${product.originalPrice ? `<span class="text-sm text-gray-400 line-through">₹${product.originalPrice}</span>` : ''}
+                        <div id="card-selection-${product.id}" class="text-xs text-emerald-700 mt-1 mb-2 min-h-[1rem]">
+                            ${selectionText ? `Selected: ${selectionText}` : ''}
+                        </div>
+                        <div class="flex items-center justify-center gap-3 mt-2">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-sm text-gray-600">From</span>
+                                <span class="text-xl font-bold text-spice-red">₹${basePrice}</span>
+                            </div>
+                            <button onclick="cardAddToCart(${product.id}, event)" class="bg-spice-red text-white px-4 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-1 text-sm">
+                                Add to Cart <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -486,6 +857,48 @@
         // --- Cart Logic ---
         let cart = [];
 
+        function ensureSelection(productId) {
+            if (!selectedOptions[productId]) {
+                selectedOptions[productId] = [];
+            }
+        }
+
+        function updateCardSelectionDisplay(productId) {
+            const selections = selectedOptions[productId] || [];
+            const product = products.find(p => p.id === productId);
+            const el = document.getElementById(`card-selection-${productId}`);
+            if (!el || !product) return;
+            
+            if (selections.length === 0) {
+                el.textContent = '';
+                return;
+            }
+            
+            const summary = selections.map(sel => {
+                const variant = product.variants[sel.variantIndex];
+                return `${variant.label} × ${sel.qty}`;
+            }).join(', ');
+            el.textContent = `Selected: ${summary}`;
+        }
+
+        function cardOpenDetails(productId) {
+            showProductDetails(productId);
+        }
+
+        function cardAddToCart(productId, event) {
+            if (event) event.stopPropagation();
+            const selections = selectedOptions[productId] || [];
+            if (selections.length === 0) {
+                // Force user to choose weight & qty first - open details modal
+                showProductDetails(productId);
+                return;
+            }
+            // Add all selected combinations to cart
+            selections.forEach(sel => {
+                addToCartWithSelection(productId, sel.variantIndex, sel.qty);
+            });
+        }
+
         function toggleCart() {
             const sidebar = document.getElementById('cart-sidebar');
             const overlay = document.getElementById('cart-overlay');
@@ -502,23 +915,32 @@
             }
         }
 
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            const existing = cart.find(i => i.id === id);
-            if(existing) existing.qty++; else cart.push({...product, qty: 1});
+        function addToCartWithSelection(productId, variantIndex, qty) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            const variant = product.variants[variantIndex] || product.variants[0];
+            const quantity = Math.max(1, qty || 1);
+
+            const existing = cart.find(i => i.id === productId && i.variantLabel === variant.label);
+            if (existing) {
+                existing.qty += quantity;
+            } else {
+                cart.push({
+                    ...product,
+                    qty: quantity,
+                    price: variant.price,
+                    variantLabel: variant.label,
+                });
+            }
             
             updateCartUI();
-            showToast(`Added ${product.name} to cart`);
+            showToast(`Added ${product.name} (${variant.label} × ${quantity}) to cart`);
             
             // Animate Badge
             const badge = document.getElementById('cart-badge');
             badge.classList.remove('scale-0');
             badge.classList.add('scale-125');
             setTimeout(() => badge.classList.remove('scale-125'), 200);
-
-            // Removed auto-open of sidebar to keep flow smooth with toasts
-            // const sidebar = document.getElementById('cart-sidebar');
-            // if(sidebar.classList.contains('translate-x-full')) toggleCart();
         }
 
         function updateQty(id, delta) {
@@ -535,16 +957,23 @@
             const badge = document.getElementById('cart-badge');
             const totalEl = document.getElementById('cart-total');
             const subtotalEl = document.getElementById('cart-subtotal');
+            const shippingEl = document.getElementById('cart-shipping');
             
             const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
-            const totalPrice = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const shipping = cart.length > 0 ? SHIPPING_COST : 0;
+            const total = subtotal + shipping;
             
             badge.innerText = totalQty;
-            badge.classList.toggle('scale-0', totalQty === 0);
+            if (totalQty === 0) {
+                badge.classList.add('scale-0', 'opacity-0');
+            } else {
+                badge.classList.remove('scale-0', 'opacity-0');
+            }
             
-            totalEl.innerText = `₹${totalPrice}`;
-            subtotalEl.innerText = `₹${totalPrice}`;
-            document.getElementById('payment-total').innerText = `₹${totalPrice}`;
+            totalEl.innerText = `₹${total}`;
+            subtotalEl.innerText = `₹${subtotal}`;
+            shippingEl.innerText = cart.length > 0 ? `₹${shipping}` : '₹0';
 
             if(cart.length === 0) {
                 container.innerHTML = `
@@ -559,7 +988,7 @@
                         <img src="${item.image}" onerror="this.src='${fallbackImg}'" class="w-14 h-14 object-cover rounded-md">
                         <div class="flex-1 min-w-0">
                             <h4 class="font-bold text-gray-800 text-sm truncate">${item.name}</h4>
-                            <p class="text-xs text-gray-500">₹${item.price} x ${item.qty}</p>
+                            <p class="text-xs text-gray-500">${item.variantLabel || ''} • ₹${item.price} x ${item.qty}</p>
                         </div>
                         <div class="flex items-center bg-gray-100 rounded-lg">
                             <button onclick="updateQty(${item.id}, -1)" class="px-2 py-1 hover:text-spice-red">-</button>
@@ -572,46 +1001,532 @@
             lucide.createIcons();
         }
 
-        // --- Payment Logic ---
+        // --- Checkout Logic ---
+        let shippingData = {};
+        const SHIPPING_COST = 50;
+
         function openCheckout() {
-            if(cart.length === 0) return alert("Cart is empty!");
+            if(cart.length === 0) {
+                showToast("Your cart is empty!");
+                return;
+            }
             toggleCart();
-            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            updateCheckoutTotals();
+            // Reset to step 1
+            document.getElementById('checkout-step-1').classList.remove('hidden');
+            document.getElementById('checkout-step-2').classList.add('hidden');
+            document.getElementById('checkout-step-3').classList.add('hidden');
+            document.getElementById('shipping-form').reset();
+            document.getElementById('payment-form').reset();
         }
 
         function closeCheckout() {
-            document.getElementById('payment-modal').classList.add('hidden');
-            if (!document.getElementById('payment-success').classList.contains('hidden')) {
-                // Reset after success
-                setTimeout(() => {
-                    document.getElementById('payment-form').classList.remove('hidden');
-                    document.getElementById('payment-success').classList.add('hidden');
-                    document.getElementById('payment-form').reset();
-                    document.getElementById('pay-btn').innerHTML = 'Pay Now';
-                }, 500);
+            document.getElementById('checkout-modal').classList.add('hidden');
+            // Reset all steps
+            document.getElementById('checkout-step-1').classList.remove('hidden');
+            document.getElementById('checkout-step-2').classList.add('hidden');
+            document.getElementById('checkout-step-3').classList.add('hidden');
+            shippingData = {};
+        }
+
+        function goToPayment(e) {
+            e.preventDefault();
+            // Save shipping data
+            shippingData = {
+                name: document.getElementById('shipping-name').value,
+                phone: document.getElementById('shipping-phone').value,
+                email: document.getElementById('shipping-email').value,
+                address: document.getElementById('shipping-address').value,
+                city: document.getElementById('shipping-city').value,
+                state: document.getElementById('shipping-state').value,
+                pincode: document.getElementById('shipping-pincode').value
+            };
+            // Move to payment step
+            document.getElementById('checkout-step-1').classList.add('hidden');
+            document.getElementById('checkout-step-2').classList.remove('hidden');
+            updateCheckoutTotals();
+        }
+
+        function backToShipping() {
+            document.getElementById('checkout-step-2').classList.add('hidden');
+            document.getElementById('checkout-step-1').classList.remove('hidden');
+        }
+
+        function updateCheckoutTotals() {
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const total = subtotal + SHIPPING_COST;
+            
+            document.getElementById('checkout-subtotal').innerText = `₹${subtotal}`;
+            document.getElementById('checkout-shipping').innerText = `₹${SHIPPING_COST}`;
+            document.getElementById('checkout-total').innerText = `₹${total}`;
+        }
+
+        // --- Payment helpers ---
+        let selectedPaymentMethod = null;
+
+        function getOrderSnapshot() {
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const shipping = SHIPPING_COST;
+            const total = subtotal + shipping;
+            const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+            const itemsText = cart.map(i => `- ${i.name} x ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+            return { subtotal, shipping, total, totalQty, itemsText };
+        }
+
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                || window.innerWidth < 768;
+        }
+
+        function startPhonePePayment() {
+            if (!STORE_UPI_ID || STORE_UPI_ID === 'yourupiid@upi') {
+                alert('PhonePe UPI is not configured yet. Please set STORE_UPI_ID in the code.');
+                return;
+            }
+            selectedPaymentMethod = 'PhonePe UPI';
+            const { total } = getOrderSnapshot();
+            const upiUrl = `upi://pay?pa=${encodeURIComponent(STORE_UPI_ID)}&pn=${encodeURIComponent('Achar Heritage')}&am=${encodeURIComponent(total)}&cu=INR&tn=${encodeURIComponent('Pickle Order Payment')}`;
+            // Open PhonePe / UPI app (only on mobile devices with UPI apps installed)
+            if (isMobileDevice()) {
+                window.location.href = upiUrl;
+                showToast('Your UPI app (PhonePe) should open. After payment, return here and click "I have completed the payment".');
+            } else {
+                alert('PhonePe UPI is only available on mobile devices. Please either open this page on your phone or use Razorpay on desktop.');
             }
         }
 
-        function processPayment(e) {
-            e.preventDefault();
-            const btn = document.getElementById('pay-btn');
-            const originalContent = btn.innerHTML;
-            
-            btn.disabled = true;
-            btn.innerHTML = `<div class="loader mr-2"></div> Processing...`;
-            
-            setTimeout(() => {
-                document.getElementById('payment-form').classList.add('hidden');
-                document.getElementById('payment-success').classList.remove('hidden');
+        function startRazorpayPayment() {
+            if (!window.Razorpay) {
+                alert('Razorpay script failed to load.');
+                return;
+            }
+            if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === 'rzp_test_yourkeyhere') {
+                alert('Razorpay is not configured yet. Please set RAZORPAY_KEY_ID in the code.');
+                return;
+            }
+
+            selectedPaymentMethod = 'Razorpay';
+            const snapshot = getOrderSnapshot();
+
+            const options = {
+                key: RAZORPAY_KEY_ID,
+                amount: snapshot.total * 100, // in paise
+                currency: "INR",
+                name: "Achar Heritage",
+                description: "Order Payment",
+                handler: function (response) {
+                    showToast('Razorpay payment completed.');
+                    confirmPayment(response.razorpay_payment_id);
+                },
+                prefill: {
+                    name: shippingData.name || '',
+                    email: shippingData.email || '',
+                    contact: shippingData.phone || ''
+                },
+                theme: {
+                    color: "#B9382E"
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        function confirmPayment(razorpayPaymentId) {
+            if (!selectedPaymentMethod) {
+                showToast('Please choose a payment method first.');
+                return;
+            }
+
+            const snapshot = getOrderSnapshot();
+            const orderId = `#ACH-2024-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            // Update order confirmation UI
+            document.getElementById('order-id').innerText = orderId;
+            document.getElementById('order-items-count').innerText = `${snapshot.totalQty} items`;
+            document.getElementById('order-total').innerText = `₹${snapshot.total}`;
+
+            // Build notification text
+            const addressBlock = `${shippingData.name}
+${shippingData.address}
+${shippingData.city}, ${shippingData.state} - ${shippingData.pincode}
+Phone: ${shippingData.phone}
+Email: ${shippingData.email}`;
+
+            let paymentInfo = `Payment Method: ${selectedPaymentMethod}`;
+            if (razorpayPaymentId) {
+                paymentInfo += `
+Razorpay Payment ID: ${razorpayPaymentId}`;
+            }
+
+            const body = `New order received!
+
+Order ID: ${orderId}
+${paymentInfo}
+
+Items:
+${snapshot.itemsText}
+
+Subtotal: ₹${snapshot.subtotal}
+Shipping: ₹${snapshot.shipping}
+Total: ₹${snapshot.total}
+
+Shipping Address:
+${addressBlock}`;
+
+            // Prepare WhatsApp and Email links
+            if (STORE_WHATSAPP_NUMBER && STORE_WHATSAPP_NUMBER !== '91XXXXXXXXXX') {
+                const waUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(body)}`;
+                document.getElementById('order-whatsapp-link').href = waUrl;
+            } else {
+                document.getElementById('order-whatsapp-link').href = '#';
+            }
+
+            if (STORE_EMAIL && STORE_EMAIL !== 'orders@example.com') {
+                const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent('New Achar Heritage Order ' + orderId)}&body=${encodeURIComponent(body)}`;
+                document.getElementById('order-email-link').href = mailUrl;
+            } else {
+                document.getElementById('order-email-link').href = '#';
+            }
+
+            // Move to success step
+            document.getElementById('checkout-step-2').classList.add('hidden');
+            document.getElementById('checkout-step-3').classList.remove('hidden');
+
+            // Clear cart
                 cart = [];
                 updateCartUI();
-                btn.disabled = false;
-                btn.innerHTML = originalContent;
-            }, 2000);
+
+            showToast("Order placed successfully! Now send it via WhatsApp or Email.");
         }
+
+        // --- Product Detail Modal Logic ---
+        let currentModalProductId = null;
+        let currentTempSelection = { variantIndex: null, qty: 1 };
+
+        function showProductDetails(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            ensureSelection(id);
+            currentModalProductId = id;
+            currentTempSelection = { variantIndex: null, qty: 1 };
+            
+            const modal = document.getElementById('product-modal');
+            const content = document.getElementById('product-modal-content');
+            const basePrice = product.variants[0]?.price || 0;
+            const existingSelections = selectedOptions[id] || [];
+            
+            content.innerHTML = `
+                <div class="relative h-96 md:h-full bg-gray-100 rounded-lg overflow-hidden">
+                    <img src="${product.image}" onerror="this.src='${fallbackImg}'" alt="${product.name}" class="w-full h-full object-cover">
+                    <div class="absolute top-4 left-4 flex gap-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${product.category === 'Non Veg' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">
+                            ${product.tag}
+                        </span>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <h2 class="font-serif text-3xl font-bold text-spice-red mt-1">${product.name}</h2>
+                        <div class="flex items-center gap-2 mt-2">
+                            ${renderStars(product.rating)}
+                            <span class="text-sm font-semibold text-gray-700">${product.rating.toFixed(1)} / 5</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">Starting from <span class="font-semibold text-spice-red">₹${basePrice}</span></p>
+                    </div>
+                    <div class="pt-2 border-t border-gray-200">
+                        <h3 class="font-bold text-gray-800 mb-2">Description</h3>
+                        <p class="text-gray-600 leading-relaxed">${product.description || 'Authentic Indian pickle made with traditional recipes and premium ingredients.'}</p>
+                    </div>
+                    <div class="pt-4 border-t border-gray-200 space-y-3">
+                        <div>
+                            <h3 class="font-bold text-gray-800 mb-2">Available Weights</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${product.variants.map((v, i) => `<button type="button" id="weight-${id}-${i}" onclick="selectVariant(${id}, ${i})" class="px-3 py-1 rounded-full border text-sm border-gray-300 text-gray-700 hover:border-spice-red">${v.label} • ₹${v.price}</button>`).join('')}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 mt-2">
+                            <span class="text-sm font-semibold text-gray-700">Quantity</span>
+                            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                                <button type="button" onclick="changeQtySelection(${id}, -1)" class="px-3 py-1 text-lg hover:bg-gray-100">-</button>
+                                <input id="qty-input-${id}" type="number" min="1" value="1" oninput="qtyInputChange(${id}, this.value)" class="w-14 text-center border-l border-r border-gray-200 py-1 text-sm focus:outline-none">
+                                <button type="button" onclick="changeQtySelection(${id}, 1)" class="px-3 py-1 text-lg hover:bg-gray-100">+</button>
+                            </div>
+                            <button type="button" id="add-combination-${id}" onclick="addCombination(${id})" class="px-4 py-1 bg-gold text-spice-red rounded-md font-bold text-sm hover:bg-yellow-500 transition-colors opacity-50 cursor-not-allowed" disabled>
+                                Add
+                            </button>
+                        </div>
+                        <p id="bulk-note-${id}" class="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded px-3 py-2 hidden">
+                            Ordering more than 10 packs? Consider contacting us for a special bulk quote.
+                        </p>
+                        <div id="selected-combinations-${id}" class="mt-4 space-y-2">
+                            ${existingSelections.length > 0 ? `
+                                <h4 class="text-sm font-semibold text-gray-700 mb-2">Selected Combinations:</h4>
+                                ${existingSelections.map((sel, idx) => {
+                                    const variant = product.variants[sel.variantIndex];
+                                    return `<div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-200">
+                                        <span class="text-sm">${variant.label} × ${sel.qty}</span>
+                                        <button onclick="removeCombination(${id}, ${idx})" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
+                                    </div>`;
+                                }).join('')}
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div class="pt-1 text-sm text-gray-500">
+                        Category: <span class="font-semibold">${product.category}</span>
+                    </div>
+                    <div id="modal-selection-summary-${id}" class="pt-2 border-t border-gray-200 text-sm text-gray-600">
+                        ${existingSelections.length > 0 ? `
+                            <div class="font-semibold mb-1">Selected Items:</div>
+                            ${existingSelections.map(sel => {
+                                const variant = product.variants[sel.variantIndex];
+                                return `<div class="text-xs">${variant.label} × ${sel.qty}</div>`;
+                            }).join('')}
+                        ` : ''}
+                    </div>
+                    <div class="pt-4 flex flex-col sm:flex-row gap-3">
+                        <button id="modal-add-${id}" onclick="modalAddToCart(${id})" class="flex-1 bg-spice-red text-white py-3 rounded-md font-bold transition-colors flex items-center justify-center gap-2 ${existingSelections.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${existingSelections.length === 0 ? 'disabled' : ''}>
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i> Add to Cart
+                        </button>
+                        <button id="modal-buy-${id}" onclick="modalBuyNow(${id})" class="flex-1 bg-gold text-spice-red py-3 rounded-md font-bold transition-colors flex items-center justify-center gap-2 ${existingSelections.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${existingSelections.length === 0 ? 'disabled' : ''}>
+                            Buy Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+            updateModalSelectionUI(id);
+        }
+
+        function updateModalSelectionUI(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            ensureSelection(productId);
+            const selections = selectedOptions[productId] || [];
+            const tempSel = currentTempSelection;
+
+            // Highlight selected weight in temp selection
+            product.variants.forEach((_, i) => {
+                const btn = document.getElementById(`weight-${productId}-${i}`);
+                if (!btn) return;
+                if (tempSel.variantIndex === i) {
+                    btn.className = "px-3 py-1 rounded-full border text-sm bg-spice-red text-white border-spice-red";
+                } else {
+                    btn.className = "px-3 py-1 rounded-full border text-sm border-gray-300 text-gray-700 hover:border-spice-red";
+                }
+            });
+
+            // Quantity input
+            const qtyInput = document.getElementById(`qty-input-${productId}`);
+            if (qtyInput) {
+                qtyInput.value = tempSel.qty || 1;
+            }
+
+            // Bulk note
+            const bulkNote = document.getElementById(`bulk-note-${productId}`);
+            if (bulkNote) {
+                const totalQty = selections.reduce((sum, s) => sum + s.qty, 0) + (tempSel.qty || 0);
+                if (totalQty > 10) {
+                    bulkNote.classList.remove('hidden');
+                } else {
+                    bulkNote.classList.add('hidden');
+                }
+            }
+
+            // Enable / disable "Add" button for new combination
+            const addCombBtn = document.getElementById(`add-combination-${productId}`);
+            const valid = tempSel.variantIndex != null && tempSel.qty && tempSel.qty > 0;
+            if (addCombBtn) {
+                if (valid) {
+                    addCombBtn.disabled = false;
+                    addCombBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    addCombBtn.disabled = true;
+                    addCombBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+
+            // Enable / disable main buttons based on existing selections
+            const addBtn = document.getElementById(`modal-add-${productId}`);
+            const buyBtn = document.getElementById(`modal-buy-${productId}`);
+            [addBtn, buyBtn].forEach(btn => {
+                if (!btn) return;
+                if (selections.length > 0) {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        }
+
+        function selectVariant(productId, variantIndex) {
+            currentTempSelection.variantIndex = variantIndex;
+            updateModalSelectionUI(productId);
+        }
+
+        function changeQtySelection(productId, delta) {
+            currentTempSelection.qty = Math.max(1, (currentTempSelection.qty || 1) + delta);
+            updateModalSelectionUI(productId);
+        }
+
+        function qtyInputChange(productId, value) {
+            const num = parseInt(value, 10);
+            currentTempSelection.qty = isNaN(num) || num <= 0 ? 1 : num;
+            updateModalSelectionUI(productId);
+        }
+
+        function addCombination(productId) {
+            if (currentTempSelection.variantIndex == null || !currentTempSelection.qty || currentTempSelection.qty <= 0) return;
+            ensureSelection(productId);
+            selectedOptions[productId].push({ ...currentTempSelection });
+            currentTempSelection = { variantIndex: null, qty: 1 };
+            refreshModalSelections(productId);
+        }
+
+        function removeCombination(productId, index) {
+            ensureSelection(productId);
+            selectedOptions[productId].splice(index, 1);
+            refreshModalSelections(productId);
+        }
+
+        function refreshModalSelections(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            const selections = selectedOptions[productId] || [];
+            
+            // Update selected combinations display
+            const container = document.getElementById(`selected-combinations-${productId}`);
+            if (container) {
+                if (selections.length > 0) {
+                    container.innerHTML = `
+                        <h4 class="text-sm font-semibold text-gray-700 mb-2">Selected Combinations:</h4>
+                        ${selections.map((sel, idx) => {
+                            const variant = product.variants[sel.variantIndex];
+                            return `<div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-200">
+                                <span class="text-sm">${variant.label} × ${sel.qty}</span>
+                                <button onclick="removeCombination(${productId}, ${idx})" class="text-red-600 hover:text-red-800 text-xs">Remove</button>
+                            </div>`;
+                        }).join('')}
+                    `;
+                } else {
+                    container.innerHTML = '';
+                }
+            }
+
+            // Update summary below Category
+            const summaryEl = document.getElementById(`modal-selection-summary-${productId}`);
+            if (summaryEl) {
+                if (selections.length > 0) {
+                    summaryEl.innerHTML = `
+                        <div class="font-semibold mb-1">Selected Items:</div>
+                        ${selections.map(sel => {
+                            const variant = product.variants[sel.variantIndex];
+                            return `<div class="text-xs">${variant.label} × ${sel.qty}</div>`;
+                        }).join('')}
+                    `;
+                } else {
+                    summaryEl.innerHTML = '';
+                }
+            }
+
+            updateModalSelectionUI(productId);
+        }
+
+        function modalAddToCart(productId) {
+            const selections = selectedOptions[productId] || [];
+            if (selections.length === 0) return;
+            selections.forEach(sel => {
+                addToCartWithSelection(productId, sel.variantIndex, sel.qty);
+            });
+            updateCardSelectionDisplay(productId);
+            closeProductModal();
+        }
+
+        function modalBuyNow(productId) {
+            const selections = selectedOptions[productId] || [];
+            if (selections.length === 0) return;
+            selections.forEach(sel => {
+                addToCartWithSelection(productId, sel.variantIndex, sel.qty);
+            });
+            updateCardSelectionDisplay(productId);
+            closeProductModal();
+            toggleCart();
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            currentModalProductId = null;
+            currentTempSelection = { variantIndex: null, qty: 1 };
+        }
+
+        // --- Bulk Order Form Logic ---
+        function openBulkOrderForm() {
+            document.getElementById('bulk-order-modal').classList.remove('hidden');
+        }
+
+        function closeBulkOrderForm() {
+            document.getElementById('bulk-order-modal').classList.add('hidden');
+            document.getElementById('bulk-order-form').reset();
+        }
+
+        function submitBulkOrder(e) {
+            e.preventDefault();
+            const name = document.getElementById('bulk-name').value;
+            const phone = document.getElementById('bulk-phone').value;
+            const email = document.getElementById('bulk-email').value;
+            const details = document.getElementById('bulk-details').value;
+
+            const body = `Bulk Order Inquiry
+
+Name: ${name}
+Phone: ${phone}
+Email: ${email}
+
+Quantity & Items Needed:
+${details}
+
+Note: This is a small business. Prices vary as raw ingredients are locally sourced. We will contact you with a custom quote.`;
+
+            // Send via WhatsApp
+            if (STORE_WHATSAPP_NUMBER && STORE_WHATSAPP_NUMBER !== '91XXXXXXXXXX') {
+                const waUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(body)}`;
+                window.open(waUrl, '_blank');
+            }
+
+            // Send via Email
+            if (STORE_EMAIL && STORE_EMAIL !== 'orders@example.com') {
+                const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent('Bulk Order Inquiry - ' + name)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailUrl;
+            }
+
+            showToast('Bulk order inquiry submitted! We will contact you soon.');
+            closeBulkOrderForm();
+        }
+
+        // Close modal on overlay click
+        const productModal = document.getElementById('product-modal');
+        if (productModal) {
+            productModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeProductModal();
+                }
+            });
+        }
+
 
         // Init
         renderProducts(products);
+
+        // Hide PhonePe button on desktop (payment still available via Razorpay everywhere)
+        const phonePeBtn = document.getElementById('phonepe-button');
+        if (phonePeBtn && !isMobileDevice()) {
+            phonePeBtn.classList.add('hidden');
+        }
     </script>
 </body>
 </html>
