@@ -289,34 +289,48 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white pt-12 pb-6 border-t-8 border-gold mt-12">
+    <footer class="bg-gray-900 text-white pt-16 pb-8 border-t-8 border-gold mt-12">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
-                <div>
-                    <div class="flex items-center justify-center md:justify-start gap-2 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="reveal delay-100">
+                    <div class="flex items-center gap-2 mb-4">
                         <i data-lucide="flower-2" class="w-6 h-6 text-gold"></i>
                         <h3 class="font-serif text-2xl font-bold text-white">Sri Pickles</h3>
                     </div>
-                    <p class="text-gray-400 text-sm">Grandma's recipe, now in your kitchen.</p>
+                    <p class="text-gray-400 text-sm">Bringing the authentic taste of Indian homes to the world, one jar at a time.</p>
                 </div>
-                <div>
+                <div class="reveal delay-200">
                     <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><a href="shop.html" class="hover:text-white">Shop All</a></li>
-                        <li><a href="about.html" class="hover:text-white">Our Story</a></li>
-                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                        <li><a href="shop.html" class="hover:text-white hover:translate-x-1 transition-transform block">Shop All</a></li>
+                        <li><a href="about.html" class="hover:text-white hover:translate-x-1 transition-transform block">About Us</a></li>
+                        <li><a href="#" class="hover:text-white hover:translate-x-1 transition-transform block">Shipping Policy</a></li>
+                        <li><a href="#" class="hover:text-white hover:translate-x-1 transition-transform block">Contact</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Secure Payment</h4>
-                    <div class="flex justify-center md:justify-start gap-4 text-gray-500">
-                        <i data-lucide="credit-card" class="w-6 h-6"></i>
-                        <i data-lucide="lock" class="w-6 h-6"></i>
+                <div class="reveal delay-300">
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Contact</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex items-center gap-2 group"><i data-lucide="map-pin" class="w-4 h-4 text-gray-500 group-hover:text-spice-red transition-colors"></i> Nirmal, Telangana, India</li>
+                        <li class="flex items-center gap-2 group"><i data-lucide="mail" class="w-4 h-4 text-gray-500 group-hover:text-spice-red transition-colors"></i> namaste@acharheritage.com</li>
+                        <li class="flex items-center gap-2 group"><i data-lucide="phone" class="w-4 h-4 text-gray-500 group-hover:text-spice-red transition-colors"></i> +91 98765 43210</li>
+                    </ul>
+                </div>
+                <div class="reveal delay-400">
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Newsletter</h4>
+                    <div class="flex flex-col gap-2">
+                        <input type="email" placeholder="Your email address" class="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:border-gold transition-colors">
+                        <button class="bg-spice-red text-white px-4 py-2 rounded font-bold hover:bg-red-700 transition-all hover:scale-105">Subscribe</button>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 pt-6 text-center text-gray-500 text-sm">
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center">
                 <p>&copy; 2024 Sri Pickles. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <i data-lucide="facebook" class="w-5 h-5 cursor-pointer hover:text-white hover:-translate-y-1 transition-transform"></i>
+                    <i data-lucide="instagram" class="w-5 h-5 cursor-pointer hover:text-white hover:-translate-y-1 transition-transform"></i>
+                    <i data-lucide="twitter" class="w-5 h-5 cursor-pointer hover:text-white hover:-translate-y-1 transition-transform"></i>
+                </div>
             </div>
         </div>
     </footer>
@@ -407,6 +421,10 @@
             <div class="flex justify-between mb-2 text-gray-600 text-sm">
                 <span>Subtotal</span>
                 <span id="cart-subtotal">₹0</span>
+            </div>
+            <div class="flex justify-between mb-2 text-gray-600 text-sm">
+                <span>GST (18%)</span>
+                <span id="cart-gst">₹0</span>
             </div>
             <div class="flex justify-between mb-2 text-gray-600 text-sm">
                 <span>Shipping</span>
@@ -515,6 +533,10 @@
                         <span id="checkout-subtotal" class="font-semibold text-gray-700">₹0</span>
                     </div>
                     <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-600">GST (18%)</span>
+                        <span id="checkout-gst" class="font-semibold text-gray-700">₹0</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-2">
                         <span class="text-sm text-gray-600">Shipping</span>
                         <span id="checkout-shipping" class="font-semibold text-gray-700">₹50</span>
                     </div>
@@ -528,11 +550,12 @@
                     <p class="text-sm text-gray-600">
                         Choose a secure payment method. <span class="font-semibold text-spice-red">Razorpay</span> is
                         the default option and works on both desktop and mobile (cards, UPI, wallets, netbanking).
-                        On mobile, you can also use <span class="font-semibold text-spice-red">PhonePe UPI</span>
-                        directly.
+                        <span id="mobile-payment-text" class="md:hidden">On mobile, you can also use <span class="font-semibold text-spice-red">In-App Payment</span> directly.</span>
+                        <span id="desktop-payment-text" class="hidden md:inline">On desktop, you can also choose to pay when confirming your order.</span>
                     </p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Mobile View: Two buttons side by side -->
+                    <div id="mobile-payment-options" class="grid grid-cols-1 md:hidden gap-4">
                         <button type="button" onclick="startRazorpayPayment()"
                             class="flex items-center justify-center gap-3 border border-blue-600 text-blue-700 hover:bg-blue-50 rounded-md py-3 font-bold transition-colors bg-blue-50">
                             <i data-lucide="credit-card" class="w-5 h-5"></i>
@@ -540,10 +563,27 @@
                         </button>
                         <button id="phonepe-button" type="button" onclick="startPhonePePayment()"
                             class="flex items-center justify-center gap-3 border border-purple-500 text-purple-700 hover:bg-purple-50 rounded-md py-3 font-bold transition-colors">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/PhonePe_Logo.svg/512px-PhonePe_Logo.svg.png"
-                                alt="PhonePe" class="h-6 w-auto">
-                            Pay with PhonePe (UPI – Mobile Only)
+                            <i data-lucide="smartphone" class="w-5 h-5"></i>
+                            In-App Payment
                         </button>
+                    </div>
+
+                    <!-- Desktop View: Razorpay button and Pay Later option -->
+                    <div id="desktop-payment-options" class="hidden md:block space-y-4">
+                        <button type="button" onclick="startRazorpayPayment()"
+                            class="w-full flex items-center justify-center gap-3 border border-blue-600 text-blue-700 hover:bg-blue-50 rounded-md py-3 font-bold transition-colors bg-blue-50">
+                            <i data-lucide="credit-card" class="w-5 h-5"></i>
+                            Pay with Razorpay (Recommended)
+                        </button>
+                        
+                        <div class="border-t border-gray-200 pt-4">
+                            <button type="button" onclick="confirmOrderWithoutPayment()"
+                                class="w-full bg-orange-600 text-white py-3 rounded-md font-bold hover:bg-orange-700 transition-colors flex items-center justify-center gap-2">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                                Pay When Confirming Order
+                            </button>
+                            <p class="text-xs text-gray-500 mt-2">Skip payment now and send order details via WhatsApp. Payment can be completed when confirming the order.</p>
+                        </div>
                     </div>
 
                     <p class="text-xs text-gray-500">
@@ -616,8 +656,8 @@
         const STORE_WHATSAPP_NUMBER = '916379243495'; // TODO: replace with homemaker's WhatsApp number
         // Email address for order notifications
         const STORE_EMAIL = 'iamajoyag@gmail.com'; // TODO: replace with homemaker's email
-        // UPI ID that receives PhonePe payments
-        const STORE_UPI_ID = 'ajoyag06@okhdfcbank'; // TODO: replace with homemaker's UPI ID
+        // UPI ID that receives payments
+        const STORE_UPI_ID = 'ajoyag06@okhdfcbank';
         // Razorpay Key ID (from Razorpay dashboard). Use test key while developing.
         const RAZORPAY_KEY_ID = 'rzp_test_yourkeyhere'; // TODO: replace with real Razorpay key
 
@@ -1063,8 +1103,9 @@
 
             const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
             const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const gst = Math.round((subtotal * 0.18) * 100) / 100; // 18% GST
             const shipping = cart.length > 0 ? SHIPPING_COST : 0;
-            const total = subtotal + shipping;
+            const total = subtotal + gst + shipping;
 
             badge.innerText = totalQty;
             if (totalQty === 0) {
@@ -1073,8 +1114,10 @@
                 badge.classList.remove('scale-0', 'opacity-0');
             }
 
-            totalEl.innerText = `₹${total}`;
+            const gstEl = document.getElementById('cart-gst');
+            totalEl.innerText = `₹${total.toFixed(2)}`;
             subtotalEl.innerText = `₹${subtotal}`;
+            if (gstEl) gstEl.innerText = cart.length > 0 ? `₹${gst.toFixed(2)}` : '₹0';
             shippingEl.innerText = cart.length > 0 ? `₹${shipping}` : '₹0';
 
             if (cart.length === 0) {
@@ -1177,11 +1220,12 @@
 
         function getOrderSnapshot() {
             const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const gst = Math.round((subtotal * 0.18) * 100) / 100; // 18% GST
             const shipping = SHIPPING_COST;
-            const total = subtotal + shipping;
+            const total = subtotal + gst + shipping;
             const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
             const itemsText = cart.map(i => `- ${i.name} x ${i.qty} = ₹${i.price * i.qty}`).join('\n');
-            return { subtotal, shipping, total, totalQty, itemsText };
+            return { subtotal, gst, shipping, total, totalQty, itemsText };
         }
 
         function isMobileDevice() {
@@ -1191,19 +1235,82 @@
 
         function startPhonePePayment() {
             if (!STORE_UPI_ID || STORE_UPI_ID === 'yourupiid@upi') {
-                alert('PhonePe UPI is not configured yet. Please set STORE_UPI_ID in the code.');
+                alert('UPI payment is not configured yet. Please set STORE_UPI_ID in the code.');
                 return;
             }
-            selectedPaymentMethod = 'PhonePe UPI';
+            selectedPaymentMethod = 'In-App Payment';
             const { total } = getOrderSnapshot();
             const upiUrl = `upi://pay?pa=${encodeURIComponent(STORE_UPI_ID)}&pn=${encodeURIComponent('Sri Pickles')}&am=${encodeURIComponent(total)}&cu=INR&tn=${encodeURIComponent('Pickle Order Payment')}`;
-            // Open PhonePe / UPI app (only on mobile devices with UPI apps installed)
+            // Open UPI app (only on mobile devices)
             if (isMobileDevice()) {
                 window.location.href = upiUrl;
-                showToast('Your UPI app (PhonePe) should open. After payment, return here and click "I have completed the payment".');
+                showToast('Your payment app should open. After payment, return here and click "I have completed the payment".');
             } else {
-                alert('PhonePe UPI is only available on mobile devices. Please either open this page on your phone or use Razorpay on desktop.');
+                alert('In-App Payment is only available on mobile devices. Please either open this page on your phone or use Razorpay on desktop.');
             }
+        }
+
+        function confirmOrderWithoutPayment() {
+            selectedPaymentMethod = 'Pay When Confirming Order';
+            const snapshot = getOrderSnapshot();
+            const orderId = `#ACH-2024-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            // Update order confirmation UI
+            document.getElementById('order-id').innerText = orderId;
+            document.getElementById('order-items-count').innerText = `${snapshot.totalQty} items`;
+            document.getElementById('order-total').innerText = `₹${snapshot.total.toFixed(2)}`;
+
+            // Build notification text with payment requirement warning
+            const addressBlock = `${shippingData.name}
+${shippingData.address}
+${shippingData.city}, ${shippingData.state} - ${shippingData.pincode}
+Phone: ${shippingData.phone}
+Email: ${shippingData.email}`;
+
+            const body = `New order received!
+
+Order ID: ${orderId}
+Payment Status: *PENDING - Payment to be completed when confirming order*
+
+⚠️ *IMPORTANT: Unless payment/transaction screenshot or supporting document is not uploaded, shipping will NOT take place.*
+
+Items:
+${snapshot.itemsText}
+
+Subtotal: ₹${snapshot.subtotal}
+GST (18%): ₹${snapshot.gst.toFixed(2)}
+Shipping: ₹${snapshot.shipping}
+Total: ₹${snapshot.total.toFixed(2)}
+
+Shipping Address:
+${addressBlock}
+
+Please confirm payment with transaction screenshot or supporting document before shipping.`;
+
+            // Prepare WhatsApp and Email links
+            if (STORE_WHATSAPP_NUMBER && STORE_WHATSAPP_NUMBER !== '91XXXXXXXXXX') {
+                const waUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(body)}`;
+                document.getElementById('order-whatsapp-link').href = waUrl;
+            } else {
+                document.getElementById('order-whatsapp-link').href = '#';
+            }
+
+            if (STORE_EMAIL && STORE_EMAIL !== 'orders@example.com') {
+                const mailUrl = `mailto:${STORE_EMAIL}?subject=${encodeURIComponent('New Sri Pickles Order ' + orderId)}&body=${encodeURIComponent(body)}`;
+                document.getElementById('order-email-link').href = mailUrl;
+            } else {
+                document.getElementById('order-email-link').href = '#';
+            }
+
+            // Move directly to success step (skip payment confirmation)
+            document.getElementById('checkout-step-2').classList.add('hidden');
+            document.getElementById('checkout-step-3').classList.remove('hidden');
+
+            // Clear cart
+            cart = [];
+            updateCartUI();
+
+            showToast("Order details ready! Send via WhatsApp or Email.");
         }
 
         function startRazorpayPayment() {
@@ -1255,7 +1362,7 @@
             // Update order confirmation UI
             document.getElementById('order-id').innerText = orderId;
             document.getElementById('order-items-count').innerText = `${snapshot.totalQty} items`;
-            document.getElementById('order-total').innerText = `₹${snapshot.total}`;
+            document.getElementById('order-total').innerText = `₹${snapshot.total.toFixed(2)}`;
 
             // Build notification text
             const addressBlock = `${shippingData.name}
@@ -1279,8 +1386,9 @@ Items:
 ${snapshot.itemsText}
 
 Subtotal: ₹${snapshot.subtotal}
+GST (18%): ₹${snapshot.gst.toFixed(2)}
 Shipping: ₹${snapshot.shipping}
-Total: ₹${snapshot.total}
+Total: ₹${snapshot.total.toFixed(2)}
 
 Shipping Address:
 ${addressBlock}`;
@@ -1632,11 +1740,32 @@ Note: This is a small business. Prices vary as raw ingredients are locally sourc
         // Init
         renderProducts(products);
 
-        // Hide PhonePe button on desktop (payment still available via Razorpay everywhere)
-        const phonePeBtn = document.getElementById('phonepe-button');
-        if (phonePeBtn && !isMobileDevice()) {
-            phonePeBtn.classList.add('hidden');
+        // Show/hide mobile and desktop payment options based on device
+        function updatePaymentOptionsDisplay() {
+            const isMobile = isMobileDevice();
+            const mobileOptions = document.getElementById('mobile-payment-options');
+            const desktopOptions = document.getElementById('desktop-payment-options');
+            const mobileText = document.getElementById('mobile-payment-text');
+            const desktopText = document.getElementById('desktop-payment-text');
+            
+            if (mobileOptions && desktopOptions) {
+                if (isMobile) {
+                    mobileOptions.classList.remove('hidden');
+                    desktopOptions.classList.add('hidden');
+                    if (mobileText) mobileText.classList.remove('hidden');
+                    if (desktopText) desktopText.classList.add('hidden');
+                } else {
+                    mobileOptions.classList.add('hidden');
+                    desktopOptions.classList.remove('hidden');
+                    if (mobileText) mobileText.classList.add('hidden');
+                    if (desktopText) desktopText.classList.remove('hidden');
+                }
+            }
         }
+        
+        // Update on page load and window resize
+        updatePaymentOptionsDisplay();
+        window.addEventListener('resize', updatePaymentOptionsDisplay);
     </script>
 </body>
 
