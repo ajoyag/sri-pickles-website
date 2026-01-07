@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Pickles | Authentic Indian Pickles</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Crimson Text for that traditional serif look, and Lato for body -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/api-helpers.js"></script>
+
+    <!-- Tailwind config moved to index.js -->
+
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="font-sans text-gray-800 bg-sand selection:bg-saffron selection:text-white relative">
+
+    <!-- Navbar -->
+    <nav
+        class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b-4 border-gold transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <!-- Logo Image -->
+                <img src="logo.png" alt="Sri Pickles Logo"
+                    class="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-500"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div
+                    class="w-10 h-10 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold animate-spin-slow group-hover:bg-gold group-hover:border-spice-red transition-colors duration-500 hidden">
+                    <i data-lucide="flower-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1
+                        class="font-serif text-2xl font-bold text-spice-red leading-none group-hover:text-gold transition-colors duration-300">
+                        Sri Pickles</h1>
+                    <p class="text-xs text-mango-green font-bold tracking-widest uppercase">Nirmal, Telangana</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href="#home"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Home</a>
+                <a href="shop.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Shop</a>
+                <a href="#about"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Our
+                    Story</a>
+                <a href="contact.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Contact</a>
+
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <!-- Profile Button (shown when logged in) -->
+                    <button id="profile-button" onclick="toggleProfileDropdown()"
+                        class="hidden flex items-center gap-2 px-3 py-2 rounded-md hover:bg-orange-50 transition-colors">
+                        <div
+                            class="w-8 h-8 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                        <span id="profile-name-display" class="hidden md:block font-semibold text-gray-700"></span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-600"></i>
+                    </button>
+
+                    <!-- Profile Icon (shown when not logged in) -->
+                    <button id="profile-icon-button" onclick="toggleProfileDropdown()"
+                        class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-orange-50 transition-colors border-2 border-gray-200">
+                        <i data-lucide="user" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="profile-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border-2 border-gold z-50 overflow-hidden">
+                        <!-- Not logged in menu -->
+                        <div id="dropdown-not-logged-in" class="py-2">
+                            <a href="shop.html" onclick="openLoginModal(); return false;"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="log-in" class="w-4 h-4"></i> Login
+                            </a>
+                            <a href="shop.html" onclick="openSignupModal(); return false;"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="user-plus" class="w-4 h-4"></i> Sign Up
+                            </a>
+                        </div>
+
+                        <!-- Logged in menu -->
+                        <div id="dropdown-logged-in" class="hidden py-2">
+                            <a href="profile.html"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="user" class="w-4 h-4"></i> Profile
+                            </a>
+                            <a href="order-history.html"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="package" class="w-4 h-4"></i> Order History
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <button onclick="handleLogout()"
+                                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2">
+                                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="relative bg-spice-red text-white py-20 lg:py-32 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-mandala-pattern animate-spin-slow" style="animation-duration: 60s;">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-spice-red to-transparent z-10"></div>
+
+        <div class="container mx-auto px-4 relative z-20 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 space-y-6 text-center md:text-left">
+                <div
+                    class="inline-block px-4 py-1 border border-gold rounded-full bg-black/20 text-gold text-sm font-semibold tracking-wider mb-2 animate-fade-up">
+                    HANDCRAFTED TRADITION
+                </div>
+                <h2 class="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-tight drop-shadow-lg animate-fade-up"
+                    style="animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards;">
+                    Taste the <span class="text-saffron italic">Soul</span> of India
+                </h2>
+                <p class="text-lg md:text-xl text-orange-100 max-w-lg mx-auto md:mx-0 animate-fade-up"
+                    style="animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards;">
+                    Grandma's secret recipes, sun-dried spices, and pure mustard oil. Preserving the art of Indian
+                    pickling in every jar.
+                </p>
+                <div class="pt-4 flex gap-4 justify-center md:justify-start animate-fade-up"
+                    style="animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards;">
+                    <a href="shop.html"
+                        class="bg-gold text-spice-red px-8 py-3 rounded-md font-bold shadow-lg hover:bg-white hover:scale-105 transition-all transform flex items-center gap-2 group">
+                        Shop Pickles <i data-lucide="arrow-right"
+                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Decorative Image Placeholder -->
+            <div class="md:w-1/2 mt-12 md:mt-0 relative flex justify-center animate-fade-up"
+                style="animation-delay: 0.4s; opacity: 0; animation-fill-mode: forwards;">
+                <div
+                    class="relative w-64 h-64 md:w-80 md:h-80 bg-orange-100 rounded-full flex items-center justify-center border-8 border-gold/30 shadow-2xl animate-float">
+                    <div class="absolute inset-2 border-2 border-dashed border-spice-red rounded-full animate-spin-slow"
+                        style="animation-duration: 20s;"></div>
+                    <div class="text-center p-8">
+                        <i data-lucide="utensils" class="w-20 h-20 text-spice-red mx-auto mb-4 opacity-80"></i>
+                        <p class="font-serif text-spice-red text-xl font-bold">100% Natural</p>
+                        <p class="text-sm text-mango-green mt-1">No Preservatives</p>
+                    </div>
+                </div>
+                <!-- Floating Elements -->
+                <div
+                    class="absolute -top-4 -right-4 bg-white p-3 rounded-lg shadow-xl indian-border transform rotate-6 hover:rotate-0 transition-transform duration-500 cursor-pointer">
+                    <span class="text-2xl font-bold text-spice-red">₹249</span>
+                    <span class="text-xs block text-gray-500">Starting at</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Wave -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+            <svg class="relative block w-[calc(100%+1.3px)] h-[50px] text-sand" data-name="Layer 1"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                    fill="currentColor"></path>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-sand">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 reveal delay-100 hover:bg-orange-50 rounded-lg transition-colors duration-300">
+                    <div
+                        class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-spice-red transform transition-transform duration-500 hover:rotate-180">
+                        <i data-lucide="sun" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-clay mb-2">Sun-Dried Process</h3>
+                    <p class="text-gray-600">We let nature do the work. Our spices are sun-dried to retain maximum aroma
+                        and flavor.</p>
+                </div>
+                <div class="p-6 reveal delay-200 hover:bg-green-50 rounded-lg transition-colors duration-300">
+                    <div
+                        class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-mango-green transform transition-transform duration-500 hover:scale-110">
+                        <i data-lucide="leaf" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-clay mb-2">Farm Fresh</h3>
+                    <p class="text-gray-600">Sourced directly from local farmers in rural India during peak season.</p>
+                </div>
+                <div class="p-6 reveal delay-300 hover:bg-yellow-50 rounded-lg transition-colors duration-300">
+                    <div
+                        class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gold transform transition-transform duration-500 hover:rotate-12">
+                        <i data-lucide="heart-handshake" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-clay mb-2">Handmade with Love</h3>
+                    <p class="text-gray-600">Made in small batches by local artisans using traditional mortar and
+                        pestle.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider-icon reveal">
+        <i data-lucide="flower" class="w-8 h-8 text-spice-red animate-spin-slow"></i>
+    </div>
+
+    <!-- Shop Section -->
+    <section id="shop" class="py-16 container mx-auto px-4">
+        <div class="text-center mb-12 reveal">
+            <h2 class="font-serif text-4xl font-bold text-spice-red mb-3">Our Collection</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Explore our range of authentic pickles, chutneys, and spices.
+                Warning: Highly Addictive.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12" id="product-grid">
+            <!-- Products will be injected by JS -->
+        </div>
+
+        <!-- Lively Shop Button Inside Section -->
+        <div class="text-center reveal">
+            <a href="shop.html"
+                class="inline-flex bg-gradient-to-r from-spice-red to-red-700 text-white px-8 py-4 rounded-full shadow-2xl border-4 border-gold hover:scale-110 hover:-translate-y-2 transition-all duration-300 items-center gap-2 animate-bounce hover:animate-none">
+                <span class="font-serif font-bold text-lg drop-shadow-md">Enter Store</span>
+                <i data-lucide="store" class="w-6 h-6"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About/Story Section -->
+    <section id="about" class="py-20 bg-stone-100 relative overflow-hidden">
+        <div class="absolute right-0 top-0 w-64 h-64 bg-mandala-pattern opacity-5 animate-spin-slow"></div>
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2 relative reveal delay-100">
+                <div
+                    class="indian-border bg-white p-2 shadow-xl transform -rotate-2 hover:rotate-0 transition-transform duration-700">
+                    <div class="h-64 bg-gray-200 flex items-center justify-center bg-cover bg-center hover:scale-105 transition-transform duration-700"
+                        style="background-image: url('https://images.unsplash.com/photo-1598514983088-d446927dfb3d?q=80&w=1000&auto=format&fit=crop');">
+                        <span class="bg-black/50 text-white px-4 py-2 font-serif text-xl backdrop-blur-sm">The 1954
+                            Recipe</span>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 reveal delay-200">
+                <h2 class="font-serif text-3xl font-bold text-clay mb-6">A Legacy in Every Jar</h2>
+                <p class="text-gray-700 mb-4 leading-relaxed">
+                    It started in a small courtyard in Nirmal, Telangana. My grandmother, Ammaji, believed that a meal
+                    without achar is like a day without sunshine. She spent her summers drying mangoes on the terrace
+                    and mixing spices by hand.
+                </p>
+                <p class="text-gray-700 mb-6 leading-relaxed">
+                    Today, <strong>Sri Pickles</strong> brings that same nostalgia to your dining table. No vinegar, no
+                    chemicals—just pure oil, salt, spices, and time.
+                </p>
+                <a href="about.html"
+                    class="text-spice-red font-bold hover:text-clay transition-colors flex items-center gap-2 group">
+                    Read Full Story <i data-lucide="arrow-right"
+                        class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8 border-t-8 border-gold">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="reveal delay-100">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="flower-2" class="w-6 h-6 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-bold text-white">Sri Pickles</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">Bringing the authentic taste of Indian homes to the world, one jar
+                        at a time.</p>
+                </div>
+                <div class="reveal delay-200">
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="shop.html"
+                                class="hover:text-white hover:translate-x-1 transition-transform block">Shop All</a>
+                        </li>
+                        <li><a href="#" class="hover:text-white hover:translate-x-1 transition-transform block">About
+                                Us</a></li>
+                        <li><a href="#" class="hover:text-white hover:translate-x-1 transition-transform block">Shipping
+                                Policy</a></li>
+                        <li><a href="contact.html"
+                                class="hover:text-white hover:translate-x-1 transition-transform block">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="reveal delay-300">
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Contact</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex items-center gap-2 group"><i data-lucide="map-pin"
+                                class="w-4 h-4 text-gray-500 group-hover:text-spice-red transition-colors"></i> Nirmal,
+                            Telangana, India</li>
+                        <li class="flex items-center gap-2 group"><i data-lucide="mail"
+                                class="w-4 h-4 text-gray-500 group-hover:text-spice-red transition-colors"></i>
+                            namaste@acharheritage.com</li>
+                        <li class="flex items-center gap-2 group"><i data-lucide="phone"
+                                class="w-4 h-4 text-gray-500 group-hover:text-spice-red transition-colors"></i> +91
+                            98765 43210</li>
+                    </ul>
+                </div>
+                <div class="reveal delay-400">
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Newsletter</h4>
+                    <div class="flex flex-col gap-2">
+                        <input type="email" placeholder="Your email address"
+                            class="bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded focus:outline-none focus:border-gold transition-colors">
+                        <button
+                            class="bg-spice-red text-white px-4 py-2 rounded font-bold hover:bg-red-700 transition-all hover:scale-105">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2024 Sri Pickles. All rights reserved.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <i data-lucide="facebook"
+                        class="w-5 h-5 cursor-pointer hover:text-white hover:-translate-y-1 transition-transform"></i>
+                    <i data-lucide="instagram"
+                        class="w-5 h-5 cursor-pointer hover:text-white hover:-translate-y-1 transition-transform"></i>
+                    <i data-lucide="twitter"
+                        class="w-5 h-5 cursor-pointer hover:text-white hover:-translate-y-1 transition-transform"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/index.js"></script>
+</body>
+
+</html>

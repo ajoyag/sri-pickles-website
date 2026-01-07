@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Sri Pickles</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api-helpers.js"></script>
+
+    <!-- Tailwind config moved to profile.js -->
+
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+
+<body class="font-sans text-gray-800 bg-sand selection:bg-saffron selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b-4 border-gold">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 group cursor-pointer">
+                <img src="logo.png" alt="Sri Pickles Logo"
+                    class="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-500"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div
+                    class="w-10 h-10 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold group-hover:bg-gold group-hover:border-spice-red transition-colors duration-500 hidden">
+                    <i data-lucide="flower-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1
+                        class="font-serif text-2xl font-bold text-spice-red leading-none group-hover:text-gold transition-colors duration-300">
+                        Sri Pickles</h1>
+                    <p class="text-xs text-mango-green font-bold tracking-widest uppercase">Nirmal, Telangana</p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-6">
+                <a href="index.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Home</a>
+                <a href="shop.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Shop</a>
+                <a href="about.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Our
+                    Story</a>
+                <a href="contact.html"
+                    class="hidden md:block hover:text-spice-red transition-colors font-semibold hover:scale-105 transform duration-200">Contact</a>
+
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button id="profile-button" onclick="toggleProfileDropdown()"
+                        class="hidden flex items-center gap-2 px-3 py-2 rounded-md hover:bg-orange-50 transition-colors">
+                        <div
+                            class="w-8 h-8 bg-spice-red rounded-full flex items-center justify-center text-white border-2 border-gold">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                        <span id="profile-name-display" class="hidden md:block font-semibold text-gray-700"></span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-600"></i>
+                    </button>
+                    <button id="profile-icon-button" onclick="toggleProfileDropdown()"
+                        class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-orange-50 transition-colors border-2 border-gray-200">
+                        <i data-lucide="user" class="w-6 h-6 text-gray-700"></i>
+                    </button>
+                    <div id="profile-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border-2 border-gold z-50 overflow-hidden">
+                        <div id="dropdown-not-logged-in" class="hidden py-2">
+                            <a href="shop.html"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="log-in" class="w-4 h-4"></i> Login
+                            </a>
+                            <a href="shop.html"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="user-plus" class="w-4 h-4"></i> Sign Up
+                            </a>
+                        </div>
+                        <div id="dropdown-logged-in" class="py-2">
+                            <a href="profile.html" onclick="closeProfileDropdown()"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-spice-red transition-colors flex items-center gap-2">
+                                <i data-lucide="user" class="w-4 h-4"></i> Profile
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <button onclick="closeProfileDropdown(); handleLogout();"
+                                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2">
+                                <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legacy User Menu (hidden) -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <header class="bg-spice-red text-white py-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-mandala-pattern"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <h1 class="font-serif text-4xl md:text-5xl font-bold mb-2">My Account</h1>
+            <p class="text-orange-100">Manage your profile and addresses</p>
+        </div>
+    </header>
+
+    <!-- Profile Content -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Sidebar -->
+            <aside class="lg:col-span-1">
+                <div
+                    class="bg-gradient-to-br from-white to-orange-50/30 p-6 rounded-lg indian-border shadow-lg sticky top-24">
+                    <div class="mb-6 pb-6 border-b-2 border-gold/30">
+                        <div
+                            class="w-20 h-20 bg-gradient-to-br from-spice-red to-red-700 rounded-full flex items-center justify-center text-white mx-auto mb-3 border-4 border-gold shadow-lg">
+                            <i data-lucide="user" class="w-10 h-10"></i>
+                        </div>
+                        <h3 id="profile-sidebar-name" class="text-center font-serif text-lg font-bold text-spice-red">
+                            Account</h3>
+                    </div>
+                    <nav class="space-y-2">
+                        <a href="#profile" onclick="showSection('profile')"
+                            class="block px-4 py-3 rounded-lg hover:bg-orange-50 text-spice-red font-semibold flex items-center gap-3 transition-all hover:translate-x-1 border-l-4 border-spice-red">
+                            <i data-lucide="user" class="w-5 h-5"></i> <span>Profile</span>
+                        </a>
+                        <a href="#addresses" onclick="showSection('addresses')"
+                            class="block px-4 py-3 rounded-lg hover:bg-orange-50 text-gray-700 flex items-center gap-3 transition-all hover:translate-x-1 hover:text-spice-red border-l-4 border-transparent">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i> <span>Addresses</span>
+                        </a>
+                        <a href="#orders" onclick="showSection('orders')"
+                            class="block px-4 py-3 rounded-lg hover:bg-orange-50 text-gray-700 flex items-center gap-3 transition-all hover:translate-x-1 hover:text-spice-red border-l-4 border-transparent">
+                            <i data-lucide="package" class="w-5 h-5"></i> <span>Order History</span>
+                        </a>
+                        <div class="pt-4 mt-4 border-t border-gray-200">
+                            <button onclick="handleLogout()"
+                                class="w-full text-left px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 flex items-center gap-3 transition-all font-semibold">
+                                <i data-lucide="log-out" class="w-5 h-5"></i> <span>Logout</span>
+                            </button>
+                        </div>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="lg:col-span-2 space-y-6">
+
+                <!-- Profile Section -->
+                <div id="profile-section"
+                    class="bg-gradient-to-br from-white to-orange-50/20 p-8 rounded-lg indian-border shadow-lg">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gold/30">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-spice-red to-red-700 rounded-full flex items-center justify-center text-white border-2 border-gold">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="font-serif text-3xl font-bold text-spice-red">Profile Information</h2>
+                    </div>
+
+                    <div id="profile-loading" class="text-center py-8">
+                        <div class="inline-block loader"></div>
+                        <p class="mt-4 text-gray-500">Loading profile...</p>
+                    </div>
+
+                    <div id="profile-content" class="hidden space-y-6">
+                        <form id="profile-form" onsubmit="updateProfile(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                                    <input type="text" id="profile-name" required
+                                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Phone</label>
+                                    <input type="tel" id="profile-phone" required
+                                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                                <input type="email" id="profile-email" disabled
+                                    class="w-full border border-gray-300 rounded p-2 bg-gray-100 text-gray-600">
+                                <p class="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                            </div>
+                            <div id="profile-error" class="text-red-600 text-sm hidden"></div>
+                            <button type="submit"
+                                class="bg-spice-red text-white px-6 py-2 rounded-md font-bold hover:bg-red-700 transition-colors">
+                                Update Profile
+                            </button>
+                        </form>
+
+                        <!-- Change Password Section -->
+                        <div class="pt-6 border-t border-gray-200">
+                            <h3 class="font-serif text-xl font-bold text-spice-red mb-4">Change Password</h3>
+                            <form id="password-form" onsubmit="changePassword(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Current
+                                        Password</label>
+                                    <input type="password" id="current-password" required
+                                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
+                                    <input type="password" id="new-password" required minlength="6"
+                                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                                </div>
+                                <div id="password-error" class="text-red-600 text-sm hidden"></div>
+                                <button type="submit"
+                                    class="bg-gold text-spice-red px-6 py-2 rounded-md font-bold hover:bg-yellow-500 transition-colors">
+                                    Change Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Addresses Section -->
+                <div id="addresses-section"
+                    class="hidden bg-gradient-to-br from-white to-orange-50/20 p-8 rounded-lg indian-border shadow-lg">
+                    <div class="flex justify-between items-center mb-6 pb-4 border-b-2 border-gold/30">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-spice-red to-red-700 rounded-full flex items-center justify-center text-white border-2 border-gold">
+                                <i data-lucide="map-pin" class="w-6 h-6"></i>
+                            </div>
+                            <h2 class="font-serif text-3xl font-bold text-spice-red">
+                                Shipping Addresses
+                            </h2>
+                        </div>
+                        <button onclick="openAddAddressModal()"
+                            class="bg-spice-red text-white px-4 py-2 rounded-md font-bold hover:bg-red-700 transition-colors text-sm flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Add Address
+                        </button>
+                    </div>
+
+                    <div id="addresses-loading" class="text-center py-8">
+                        <div class="inline-block loader"></div>
+                        <p class="mt-4 text-gray-500">Loading addresses...</p>
+                    </div>
+
+                    <div id="addresses-list" class="space-y-4">
+                        <!-- Addresses will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="orders-section"
+                    class="hidden bg-gradient-to-br from-white to-orange-50/20 p-8 rounded-lg indian-border shadow-lg">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gold/30">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-spice-red to-red-700 rounded-full flex items-center justify-center text-white border-2 border-gold">
+                            <i data-lucide="package" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="font-serif text-3xl font-bold text-spice-red">Order History</h2>
+                    </div>
+
+                    <div id="orders-loading" class="text-center py-16">
+                        <div class="inline-block loader mb-4"></div>
+                        <p class="text-gray-500 text-lg">Loading your orders...</p>
+                    </div>
+
+                    <div id="orders-empty" class="hidden text-center py-16">
+                        <div class="bg-white rounded-lg indian-border shadow-lg p-12 max-w-md mx-auto">
+                            <div
+                                class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="package" class="w-12 h-12 text-gray-400"></i>
+                            </div>
+                            <h3 class="font-serif text-2xl font-bold text-gray-700 mb-3">No Orders Yet</h3>
+                            <p class="text-gray-500 mb-6">You haven't placed any orders yet. Start shopping to see your
+                                order history here.</p>
+                            <a href="shop.html"
+                                class="inline-block bg-gradient-to-r from-spice-red to-red-700 text-white px-8 py-3 rounded-lg font-bold hover:shadow-lg transition-all hover:scale-105">
+                                Start Shopping
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="orders-list" class="space-y-6">
+                        <!-- Orders will be loaded here -->
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </section>
+
+    <!-- Order Detail Modal -->
+    <div id="order-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl my-8 p-6 indian-border">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-serif text-2xl font-bold text-spice-red">Order Details</h3>
+                <button onclick="closeOrderModal()" class="text-gray-400 hover:text-gray-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="order-detail-content">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Address Modal -->
+    <div id="address-modal"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-serif text-xl font-bold text-spice-red" id="address-modal-title">Add Address</h3>
+                <button onclick="closeAddressModal()" class="text-gray-400 hover:text-gray-700">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="address-form" onsubmit="saveAddress(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                    <input type="text" id="address-name" required
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Phone</label>
+                    <input type="tel" id="address-phone" required
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Street Address</label>
+                    <input type="text" id="address-street" required
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">City</label>
+                        <input type="text" id="address-city" required
+                            class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">State</label>
+                        <input type="text" id="address-state" required
+                            class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">PIN Code</label>
+                    <input type="text" id="address-pincode" required pattern="[0-9]{6}" maxlength="6"
+                        class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-spice-red">
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="address-default" class="accent-spice-red">
+                    <label for="address-default" class="text-sm text-gray-700">Set as default address</label>
+                </div>
+                <div id="address-error" class="text-red-600 text-sm hidden"></div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeAddressModal()"
+                        class="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-md font-bold hover:bg-gray-100 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="flex-1 bg-spice-red text-white px-4 py-2 rounded-md font-bold hover:bg-red-700 transition-colors">
+                        Save Address
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8 border-t-8 border-gold mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="flower-2" class="w-6 h-6 text-gold"></i>
+                        <h3 class="font-serif text-2xl font-bold text-white">Sri Pickles</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">Bringing the authentic taste of Indian homes to the world, one jar
+                        at a time.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="shop.html"
+                                class="hover:text-white hover:translate-x-1 transition-transform block">Shop All</a>
+                        </li>
+                        <li><a href="about.html"
+                                class="hover:text-white hover:translate-x-1 transition-transform block">About Us</a>
+                        </li>
+                        <li><a href="contact.html"
+                                class="hover:text-white hover:translate-x-1 transition-transform block">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gold mb-4 uppercase text-sm tracking-wider">Contact</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> Nirmal,
+                            Telangana, India</li>
+                        <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i>
+                            namaste@acharheritage.com</li>
+                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4"></i> +91 98765 43210
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 Sri Pickles. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/profile.js"></script>
+</body>
+
+</html>
