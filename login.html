@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Sri Pickles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .font-serif {
+            font-family: 'Crimson Text', serif;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gray-100 relative">
+
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 z-0 opacity-10"
+        style="background-image: radial-gradient(#d97706 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+    <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 z-10 animate-in fade-in zoom-in duration-300">
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-spice-red">
+                <i data-lucide="shield-check" class="w-8 h-8 text-red-700"></i>
+            </div>
+            <h1 class="font-serif text-3xl font-bold text-gray-900">Admin Portal</h1>
+            <p class="text-gray-500 text-sm mt-1">Sri Pickles Management System</p>
+        </div>
+
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <div class="relative">
+                    <i data-lucide="mail" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"></i>
+                    <input type="email" id="email" required
+                        class="pl-10 w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                        placeholder="admin@sripickles.com">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="relative">
+                    <i data-lucide="lock" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"></i>
+                    <input type="password" id="password" required
+                        class="pl-10 w-full border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <div id="error-msg" class="hidden text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                <span id="error-text">Invalid credentials</span>
+            </div>
+
+            <button type="submit" id="login-btn"
+                class="w-full bg-red-700 text-white font-bold py-3 rounded-lg hover:bg-red-800 transition-all shadow-lg flex justify-center items-center gap-2">
+                <span>Sign In Securely</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+
+            <div class="relative py-2 items-center flex">
+                <div class="flex-grow border-t border-gray-200"></div>
+                <span class="flex-shrink-0 mx-4 text-gray-400 text-[10px] font-bold uppercase">Dev Mode</span>
+                <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <button type="button" id="dev-access-btn" onclick="handleDevQuickAccess()"
+                class="w-full bg-gray-100 text-gray-600 font-bold py-2 rounded-lg hover:bg-gray-200 transition-all text-xs flex justify-center items-center gap-2 border border-gray-200">
+                <i data-lucide="terminal" class="w-4 h-4"></i> Quick Developer Access
+            </button>
+        </form>
+
+        <div class="mt-8 text-center border-t pt-6">
+            <p class="text-xs text-gray-400">Authorized Personnel Only. <br>Access is monitored and logged.</p>
+        </div>
+    </div>
+
+    <!-- Init Script -->
+    <script type="module">
+        lucide.createIcons();
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        // Load Config (Assuming env loaded or hardcoded for demo, user must ensure window.env or placeholders)
+        // We will try to read from window if set or hardcode placeholders for user to replace
+        // HARDCODED CONFIG FOR DEMO/DEV
+        const SUPABASE_URL = 'https://krdhwyhbagecgliabhxw.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyZGh3eWhiYWdlY2dsaWFiaHh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NjQ3MzcsImV4cCI6MjA4NTM0MDczN30.f9a_Gz9Wt8_nnt0Dslww4JsuSVOOdgAS_CO3Zo8LTzA';
+
+        // Helper to check if credentials are set
+        if (SUPABASE_URL.includes('YOUR')) {
+            document.getElementById('error-msg').classList.remove('hidden');
+            document.getElementById('error-text').innerText = 'System Configuration Missing';
+        }
+
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('login-btn');
+            const errDiv = document.getElementById('error-msg');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Authenticating...';
+            errDiv.classList.add('hidden');
+            lucide.createIcons();
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                // Check Admin Profile (Enforces Role Access)
+                const { data: profile, error: profError } = await supabase
+                    .from('admin_profiles')
+                    .select('*')
+                    .eq('id', data.user.id)
+                    .single();
+
+                if (profError || !profile || !profile.is_active) {
+                    await supabase.auth.signOut();
+                    throw new Error('Access Denied: Not an authorized admin.');
+                }
+
+                // Success
+                btn.classList.replace('bg-red-700', 'bg-green-600');
+                btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Success!';
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 800);
+
+            } catch (err) {
+                console.error(err);
+                errDiv.classList.remove('hidden');
+                document.getElementById('error-text').innerText = err.message;
+                btn.disabled = false;
+                btn.innerHTML = 'Sign In Securely <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>';
+                lucide.createIcons();
+            }
+        });
+
+        // --- IMPROVED DEV ACCESS (REAL AUTH) ---
+        window.handleDevQuickAccess = async function () {
+            const btn = document.getElementById('dev-access-btn');
+            const originalText = btn.innerHTML;
+            const errWrapper = document.getElementById('error-msg');
+            const errText = document.getElementById('error-text');
+
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Authenticating...`;
+            if (errWrapper) errWrapper.classList.add('hidden');
+            lucide.createIcons();
+
+            const DEV_EMAIL = 'iamajoyag@gmail.com';
+            const DEV_PASS = 'sripicklesDev123'; // Hardcoded dev password
+
+            try {
+                // 1. Try to Login
+                let { data, error } = await supabase.auth.signInWithPassword({
+                    email: DEV_EMAIL,
+                    password: DEV_PASS
+                });
+
+                // 2. If Invalid Login (likely doesn't exist), Try Signup
+                if (error && (error.message.includes('Invalid login') || error.message.includes('not found'))) {
+                    console.log('Dev user not found, creating...');
+                    const signUpRes = await supabase.auth.signUp({
+                        email: DEV_EMAIL,
+                        password: DEV_PASS,
+                        options: { data: { full_name: 'System Developer' } }
+                    });
+
+                    if (signUpRes.error) throw signUpRes.error;
+                    data = signUpRes.data;
+
+                    // Auto-Login after signup is often automatic, but let's be sure
+                    if (!data.session) {
+                        // If email confirmation is off, we might need to sign in again or it's implicitly done
+                        const signInRetry = await supabase.auth.signInWithPassword({ email: DEV_EMAIL, password: DEV_PASS });
+                        if (signInRetry.data.session) data = signInRetry.data;
+                    }
+                } else if (error) {
+                    throw error;
+                }
+
+                if (!data.session) {
+                    // Check if we are in the "Email Confirmation Required" state
+                    if (data.user && !data.user.email_confirmed_at) {
+                        alert("⚠️ ACTION REQUIRED: Supabase Email Confirmation is ON.\n\nWe created a 'iamajoyag@gmail.com' user, but you cannot log in until you:\n1. Go to Supabase Dashboard > Authentication > Users.\n2. Click the three dots next to 'iamajoyag@gmail.com' and click 'Confirm Email'.\n\nOR \n\nDisable 'Confirm Email' in Supabase > Auth > Providers > Email.");
+                        throw new Error("Email confirmation pending.");
+                    }
+                    throw new Error("Could not establish session. Check email confirmation settings.");
+                }
+
+                // 3. Ensure Admin Profile Exists (RLS Requirement)
+                // We use the 'Admins can view and edit own profile' policy to insert ourselves
+                const user = data.session.user;
+                const { data: profile, error: profileCheckError } = await supabase
+                    .from('admin_profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+
+                if (!profile) {
+                    console.log('Creating Admin Profile for Dev...');
+                    const { error: insertError } = await supabase
+                        .from('admin_profiles')
+                        .insert([{
+                            id: user.id,
+                            email: DEV_EMAIL,
+                            full_name: 'System Developer',
+                            role: 'developer',
+                            is_active: true,
+                            permissions: { all: true }
+                        }]);
+
+                    if (insertError) {
+                        console.error('Profile creation failed:', insertError);
+                        // We continue anyway, hoping RLS allows reading if the row exists now (race condition) or maybe it failed because it exists
+                    }
+                }
+
+                // 4. Cleanup old fake bypass and Redirect
+                localStorage.removeItem('sri_pickle_dev_bypass');
+                window.location.href = 'index.html';
+
+            } catch (err) {
+                console.error('Dev Access Failed:', err);
+                if (errWrapper) {
+                    errText.innerText = `Dev Access Failed: ${err.message}`;
+                    errWrapper.classList.remove('hidden');
+                } else {
+                    alert(`Dev Access Failed: ${err.message}`);
+                }
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+
+</html>
